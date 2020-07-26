@@ -1,5 +1,6 @@
 package com.teamtracker.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,9 +26,6 @@ public class User {
 
   private String userName; //从微信可以获取哪些？
 
-  private String passworld;
-
-  private String conformPassword;
 
 ////  @ManyToMany(mappedBy = "partners",cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 //  private List<Project> projectsInvolvedIn;
@@ -47,6 +45,22 @@ public class User {
   )
   private List<Project> projectParticipated;
 
+  public List<Project> getProjectOwned() {
+    return projectOwned;
+  }
+
+  public void setProjectOwned(List<Project> projectOwned) {
+    this.projectOwned = projectOwned;
+  }
+
+  public List<Project> getProjectParticipated() {
+    return projectParticipated;
+  }
+
+  public void setProjectParticipated(
+      List<Project> projectParticipated) {
+    this.projectParticipated = projectParticipated;
+  }
 
   public User() {
   }
@@ -78,21 +92,6 @@ public class User {
     this.userName = userName;
   }
 
-  public String getPassworld() {
-    return passworld;
-  }
-
-  public void setPassworld(String passworld) {
-    this.passworld = passworld;
-  }
-
-  public String getConformPassword() {
-    return conformPassword;
-  }
-
-  public void setConformPassword(String conformPassword) {
-    this.conformPassword = conformPassword;
-  }
 
   public Date getCreatedAt() {
     return createdAt;

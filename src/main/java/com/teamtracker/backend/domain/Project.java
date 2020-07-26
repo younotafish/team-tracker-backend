@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import org.hibernate.mapping.ToOne;
 
@@ -35,8 +36,13 @@ public class Project {
   private Date createdAt;
   @JsonFormat(pattern = "yyyy-mm-dd")
   private Date updatedAt;
+// ownerName
+  private String ownerName;
+
+
 
   @ManyToOne
+  @JoinColumn(name = "project_id")
   @JsonIgnore
   private User owner;
 
@@ -48,6 +54,9 @@ public class Project {
   )
   @JsonIgnore
   private List<User> partners;
+
+  @OneToMany(mappedBy = "project")
+  private List<ProjectTask> tasksContained;
 
   public User getOwner() {
     return owner;
@@ -132,5 +141,20 @@ public class Project {
 
   public void setUpdatedAt(Date updatedAt) {
     this.updatedAt = updatedAt;
+  }
+  public String getOwnerName() {
+    return ownerName;
+  }
+
+  public void setOwnerName(String ownerName) {
+    this.ownerName = ownerName;
+  }
+
+  public List<ProjectTask> getTasksContained() {
+    return tasksContained;
+  }
+
+  public void setTasksContained(List<ProjectTask> tasksContained) {
+    this.tasksContained = tasksContained;
   }
 }
