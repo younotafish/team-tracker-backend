@@ -1,6 +1,7 @@
 package com.teamtracker.backend.service;
 
 import com.teamtracker.backend.domain.Project;
+import com.teamtracker.backend.domain.User;
 import com.teamtracker.backend.exceptions.ProjectNameException;
 import com.teamtracker.backend.repository.ProjectRepository;
 import java.util.List;
@@ -41,5 +42,9 @@ public class ProjectService {
       throw  new ProjectNameException("Can not delete project with name "+ projectName + ". This project does not exist");
     }
     projectRepository.delete(project);
+  }
+
+  public Iterable<Project> findAllByUser(User user){
+    Iterable<Project> projects =
   }
 }

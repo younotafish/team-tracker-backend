@@ -1,8 +1,10 @@
 package com.teamtracker.backend.controller;
 
 import com.teamtracker.backend.domain.Project;
+import com.teamtracker.backend.domain.User;
 import com.teamtracker.backend.service.MapValidationErrorService;
 import com.teamtracker.backend.service.ProjectService;
+import com.teamtracker.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ public class ProjectController {
   ProjectService projectService;
   @Autowired
   MapValidationErrorService mapValidationErrorService;
+  @Autowired
+  UserService userService;
 
   @PostMapping("")
   public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project,
@@ -51,6 +55,12 @@ public class ProjectController {
   @DeleteMapping("/{projectName}")
   public void deleteProjectByName(@PathVariable String projectName){
     projectService.deleteProjectByName(projectName);
+  }
+
+  @GetMapping("/all/{userName}")
+  public Iterable<Project> getAllProjectByName(@PathVariable String userName){
+    User theUser = userService.findByUserName(userName);
+    return projectService.
   }
 
 

@@ -1,6 +1,7 @@
 package com.teamtracker.backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -13,7 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import org.hibernate.mapping.ToOne;
 
 @Entity
 public class Project {
@@ -33,16 +36,18 @@ public class Project {
   @JsonFormat(pattern = "yyyy-mm-dd")
   private Date updatedAt;
 
-  @OneToOne
+  @ManyToOne
+  @JsonIgnore
   private User owner;
 
-//  @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
-//  @JoinTable(
-//      name = "projects_partners",
-//      joinColumns = {@JoinColumn(name="user_id")},
-//      inverseJoinColumns = @JoinColumn(name = "project_Name")
-//  )
-//  private List<User> partners;
+  @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+  @JoinTable(
+      name = "user_project",
+      joinColumns = {@JoinColumn(name="project_id")},
+      inverseJoinColumns = @JoinColumn(name = "user_id")
+  )
+  @JsonIgnore
+  private List<User> partners;
 
   public User getOwner() {
     return owner;
@@ -52,13 +57,13 @@ public class Project {
     this.owner = owner;
   }
 
-//  public List<User> getPartners() {
-//    return partners;
-//  }
-//
-//  public void setPartners(List<User> partners) {
-//    this.partners = partners;
-//  }
+  public List<User> getPartners() {
+    return partners;
+  }
+
+  public void setPartners(List<User> partners) {
+    this.partners = partners;
+  }
 
   public Project() {
   }

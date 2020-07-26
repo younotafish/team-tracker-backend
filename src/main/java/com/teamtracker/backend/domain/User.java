@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
@@ -33,20 +35,29 @@ public class User {
   private Date createdAt;
 
   private Date updatedAt;
-//  @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "User", orphanRemoval = true)
-//  private List<Project> projectList = new ArrayList<>();
+
+  @OneToMany(fetch = FetchType.LAZY,mappedBy = "owner")
+  private List<Project> projectOwned = new ArrayList<>();
+
+  @ManyToMany()
+  @JoinTable(
+      name="user_project",
+      joinColumns = @JoinColumn(name="user_id"),
+      inverseJoinColumns = @JoinColumn(name = "project_id")
+  )
+  private List<Project> projectParticipated;
 
 
   public User() {
   }
 
   @PrePersist
-  protected void onCreate(){
+  protected void onCreate() {
     this.createdAt = new Date();
   }
 
   @PreUpdate
-  protected void onUpdate(){
+  protected void onUpdate() {
     this.updatedAt = new Date();
   }
 
