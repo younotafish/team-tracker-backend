@@ -44,13 +44,13 @@ public class TaskController {
     return new ResponseEntity<ProjectTask>(newProjectTask, HttpStatus.OK);
   }
   @PostMapping("/tasksByProject")
-  public Iterable<ProjectTask> getTasksByProject(@Valid @RequestBody Project project, BindingResult result){
-    // ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
-    // if (errMap != null) {
-    //   return errMap;
-    // }
+  public ResponseEntity<?> getTasksByProject(@Valid @RequestBody Project project, BindingResult result){
+     ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+     if (errMap != null) {
+       return errMap;
+     }
     Iterable<ProjectTask> tasksByProject = taskService.getTasksByProject(project);
-    return tasksByProject;
+    return new ResponseEntity<Iterable<ProjectTask>>(tasksByProject, HttpStatus.OK);
   }
 
   @PostMapping("/tasksTodoByProject")

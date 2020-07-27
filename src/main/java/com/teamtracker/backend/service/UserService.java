@@ -8,6 +8,8 @@ import com.teamtracker.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -20,19 +22,17 @@ public class UserService {
   public User findByUserName(String userName){
     User user = userRepository.findByUserName(userName);
     if(user == null){
-      throw new UserNameException("User with name: "+ userName+" does not exist");
+      User newUser = new User(userName);
+      return userRepository.save(newUser);
     }
     return user;
   }
 
 
   public Iterable<User> getCollaboratorsByProject(Project project){
-    if(true){
-      //传入参数异常
-    }
     Project project1 = projectRepository.findByOwnerNameAndProjectName(project.getOwnerName(),project.getProjectName());
-    return project1.getPartners();
-
+    List<User> partners = project1.getPartners();
+    return partners;
 
   }
 

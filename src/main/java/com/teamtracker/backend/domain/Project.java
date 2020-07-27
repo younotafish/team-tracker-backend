@@ -17,6 +17,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.mapping.ToOne;
 
 @Entity
@@ -24,6 +26,7 @@ public class Project {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @NotNull
   private String projectName;
   private String projectDescription;
 
@@ -36,6 +39,7 @@ public class Project {
   @JsonFormat(pattern = "yyyy-mm-dd")
   private Date updatedAt;
 // ownerName
+  @NotNull
   private String ownerName;
 
 

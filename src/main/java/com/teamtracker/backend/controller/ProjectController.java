@@ -46,54 +46,66 @@ public class ProjectController {
     return new ResponseEntity<Project>(project1, HttpStatus.OK);
   }
 
-  @GetMapping("/getByProjectNameAndOwnerName")
-  public ResponseEntity<?> getProjectByProjectNameAndOwnerName(
-          @RequestParam(name = "projectName") String projectName,
-          @RequestParam(name = "ownerName") String ownerName
-  ) {
+//  @GetMapping("/getByProjectNameAndOwnerName")
+//  public ResponseEntity<?> getProjectByProjectNameAndOwnerName(
+//          @RequestParam(name = "projectName") String projectName,
+//          @RequestParam(name = "ownerName") String ownerName
+//  ) {
+//    Project foundProject = projectService.findByOwnerNameAndProjectName(ownerName, projectName);
+//    return new ResponseEntity<Project>(foundProject, HttpStatus.OK);
+//  }
+
+  @GetMapping("/byProjectNameAndOwnerName")
+  public ResponseEntity<?> getProjectByProjectNameAndOwnerName(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
+    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+    if (errMap != null) {
+      return errMap;
+    }
+    String ownerName = jsonMap.get("ownerName");
+    String projectName = jsonMap.get("projectName");
     Project foundProject = projectService.findByOwnerNameAndProjectName(ownerName, projectName);
     return new ResponseEntity<Project>(foundProject, HttpStatus.OK);
   }
 
 //  没用
   @GetMapping("/all")
-  public Iterable<Project> getAllProject() {
-    return projectService.findAllProject();
+  public ResponseEntity<Iterable<Project>> getAllProject() {
+    Iterable<Project> allProject = projectService.findAllProject();
+    return new ResponseEntity<Iterable<Project>>(allProject, HttpStatus.OK);
   }
 
-// 有问题
-//  @DeleteMapping("/deleteByProjectNameAndOwnerName")
-//  public ResponseEntity<Iterable<Project>> deleteProjectByName(
-//          @RequestParam(name = "projectName") String projectName,
-//          @RequestParam(name = "ownerName") String ownerName
-//  ) {
-//    Iterable<Project> projectsAfterDelete = projectService.deleteProjectByProjectNameAndOwnerName(projectName, ownerName);
-//    return new ResponseEntity<Iterable<Project>>(projectsAfterDelete, HttpStatus.OK);
-//  }
-  @DeleteMapping("/deleteByProjectNameAndOwnerName")
-  public void deleteProjectByName(
-          @RequestParam(name = "projectName") String projectName,
-          @RequestParam(name = "ownerName") String ownerName
-  ) {
+  @DeleteMapping("/byProjectNameAndOwnerName")
+  public ResponseEntity<?> deleteProjectByName(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
+    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+    if (errMap != null) {
+      return errMap;
+    }
+    String ownerName = jsonMap.get("ownerName");
+    String projectName = jsonMap.get("projectName");
     projectService.deleteProjectByProjectNameAndOwnerName(projectName, ownerName);
-
-
+    return new ResponseEntity<String>("already deleted", HttpStatus.OK);
   }
 
   @GetMapping("/own/{ownerName}")
-  public Iterable<Project> getAllProjectByOwnerName(@PathVariable String ownerName) {
+  public ResponseEntity<Iterable<Project>> getAllProjectByOwnerName(@PathVariable String ownerName) {
     User theUser = userService.findByUserName(ownerName);
-    return projectService.findAllByUser(theUser);
+    Iterable<Project> projectsByOwner = projectService.findAllByUser(theUser);
+    return new ResponseEntity<Iterable<Project>>(projectsByOwner, HttpStatus.OK);
   }
 
   @GetMapping("/par/{parName}")
-  public Iterable<Project> getAllProjectByParName(@PathVariable String parName) {
+  public ResponseEntity<Iterable<Project>> getAllProjectByParName(@PathVariable String parName) {
     User theUser = userService.findByUserName(parName);
-    return projectService.findAllByPar(theUser);
+    Iterable<Project> projectsByPar = projectService.findAllByPar(theUser);
+    return new ResponseEntity<Iterable<Project>>(projectsByPar, HttpStatus.OK);
   }
 
   @PostMapping("/engage")
-  public ResponseEntity<?> engageProject(@RequestBody Map<String, String> jsonMap) {
+  public ResponseEntity<?> engageProject(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
+    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+    if (errMap != null) {
+      return errMap;
+    }
     String participantName = jsonMap.get("participantName");
     String ownerName = jsonMap.get(("ownerName"));
     String projectName = jsonMap.get("projectName");
@@ -104,15 +116,12 @@ public class ProjectController {
   }
 
   @GetMapping("/collaborators")
-  public Iterable<?> getAllCollaborators(@RequestBody Project project) {
+  public ResponseEntity<?> getAllCollaborators(@Valid @RequestBody Project project, BindingResult result) {
+    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+    if (errMap != null) {
+      return errMap;
+    }
     Iterable<User> collaborators = userService.getCollaboratorsByProject(project);
-    // projectPar 可能需要
-    //    for (User user : collaborators
-//    ) {
-//      user.setProjectParticipated(null);
-//    }
-    return userService.getCollaboratorsByProject(project);
+    return new ResponseEntity<Iterable<User>>(collaborators, HttpStatus.OK);
   }
-
-
 }

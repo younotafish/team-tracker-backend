@@ -13,18 +13,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class ProjectTask {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(updatable = false,unique = true)
-  private UUID uuid;
+//  private UUID uuid;
   private String taskName;
-  private String description;
+
+  private String taskDescription;
   private String status;
+  @NotNull
   private String projectName;
+  @NotNull
   private String ownerName;
 
   @ManyToOne
@@ -52,14 +55,14 @@ public class ProjectTask {
     this.project = project;
   }
 
-  public UUID getUuid() {
-    return uuid;
-  }
-
-
-  public void setUuid(UUID uuid) {
-    this.uuid = uuid;
-  }
+//  public UUID getUuid() {
+//    return uuid;
+//  }
+//
+//
+//  public void setUuid(UUID uuid) {
+//    this.uuid = uuid;
+//  }
 
   public String getTaskName() {
     return taskName;
@@ -84,9 +87,8 @@ public class ProjectTask {
   public void setOwnerName(String ownerName) {
     this.ownerName = ownerName;
   }
+
 //  private String priority;
-
-
 
   public ProjectTask() {
   }
@@ -119,14 +121,13 @@ public class ProjectTask {
     this.status = status;
   }
 
-  public String getDescription() {
-    return description;
+  public String getTaskDescription() {
+    return taskDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setTaskDescription(String taskDescription) {
+    this.taskDescription = taskDescription;
   }
-
 
   public Date getStartDate() {
     return startDate;

@@ -43,6 +43,8 @@ public class User {
       joinColumns = @JoinColumn(name="user_id"),
       inverseJoinColumns = @JoinColumn(name = "project_id")
   )
+
+  @JsonIgnore
   private List<Project> projectParticipated;
 
   public List<Project> getProjectOwned() {
@@ -63,6 +65,10 @@ public class User {
   }
 
   public User() {
+  }
+
+  public User(String userName) {
+    this.userName = userName;
   }
 
   @PrePersist
