@@ -9,8 +9,10 @@ import com.teamtracker.backend.repository.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class ProjectService {
 
   @Autowired
@@ -22,16 +24,17 @@ public class ProjectService {
 
   public Project saveProject(Project project) {
     if (project.getProjectName() != null) {
-      Project existingProject = projectRepository.findByOwnerNameAndProjectName(project.getOwnerName(), project.getProjectName());
+      Project existingProject = projectRepository
+          .findByOwnerNameAndProjectName(project.getOwnerName(), project.getProjectName());
       if (existingProject != null) {
         throw new ProjectNameException(
-                "The project " + project.getProjectName() + " in this account has already existed.");
+            "The project " + project.getProjectName() + " in this account has already existed.");
       }
     }
 
-      User theUser = userRepository.findByUserName(project.getOwnerName());
-      project.setOwner(theUser);
-      return projectRepository.save(project);
+    User theUser = userRepository.findByUserName(project.getOwnerName());
+    project.setOwner(theUser);
+    return projectRepository.save(project);
   }
 
   public Project findByOwnerNameAndProjectName(String ownerName, String projectName) {
@@ -42,19 +45,19 @@ public class ProjectService {
     return foundProject;
   }
 
-//  没用
+  //  没用
   public Iterable<Project> findAllProject() {
     return projectRepository.findAll();
   }
 
-  public Iterable<Project> deleteProjectByProjectNameAndOwnerName(String projectName, String ownerName) {
+  public void deleteProjectByProjectNameAndOwnerName(String projectName,
+      String ownerName) {
     Project foundProject = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
     if (foundProject == null) {
       throw new ProjectNameException(
           "Can not delete project " + projectName + " because this project does not exist");
     }
-    Iterable<Project> projectsAfterDelete = projectRepository.deleteByProjectNameAndOwnerName(projectName, ownerName);
-    return projectsAfterDelete;
+    projectRepository.delete(foundProject);
   }
 
   public Iterable<Project> findAllByUser(User user) {

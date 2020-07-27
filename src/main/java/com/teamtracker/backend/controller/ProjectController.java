@@ -71,12 +71,12 @@ public class ProjectController {
 //    return new ResponseEntity<Iterable<Project>>(projectsAfterDelete, HttpStatus.OK);
 //  }
   @DeleteMapping("/deleteByProjectNameAndOwnerName")
-  public Iterable<Project> deleteProjectByName(
+  public void deleteProjectByName(
           @RequestParam(name = "projectName") String projectName,
           @RequestParam(name = "ownerName") String ownerName
   ) {
-    Iterable<Project> projectsAfterDelete = projectService.deleteProjectByProjectNameAndOwnerName(projectName, ownerName);
-    return projectsAfterDelete;
+    projectService.deleteProjectByProjectNameAndOwnerName(projectName, ownerName);
+
 
   }
 
