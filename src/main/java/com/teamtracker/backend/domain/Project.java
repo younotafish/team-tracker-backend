@@ -24,7 +24,6 @@ public class Project {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(updatable = false,unique = true)
   private String projectName;
   private String projectDescription;
 

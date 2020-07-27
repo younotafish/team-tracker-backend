@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class TaskService {
 
+  final static String todo = "Todo";
+  final static String doing = "Doing";
+  final static String done = "Done";
+
   @Autowired
   ProjectRepository projectRepository;
   @Autowired
@@ -51,4 +55,28 @@ public class TaskService {
     return tasksInProject;
 
   }
+
+  public Iterable<ProjectTask> getTasksTodoByProject(Project project){
+      String projectName = project.getProjectName();
+      String ownerName = project.getOwnerName();
+      Iterable<ProjectTask> tasksInProject = projectTaskRepository
+              .findByProjectNameAndOwnerNameAndStatus(projectName, ownerName, todo);
+      return tasksInProject;
+  }
+
+    public Iterable<ProjectTask> getTasksDoingByProject(Project project){
+        String projectName = project.getProjectName();
+        String ownerName = project.getOwnerName();
+        Iterable<ProjectTask> tasksInProject = projectTaskRepository
+                .findByProjectNameAndOwnerNameAndStatus(projectName, ownerName, doing);
+        return tasksInProject;
+    }
+
+    public Iterable<ProjectTask> getTasksDoneByProject(Project project){
+        String projectName = project.getProjectName();
+        String ownerName = project.getOwnerName();
+        Iterable<ProjectTask> tasksInProject = projectTaskRepository
+                .findByProjectNameAndOwnerNameAndStatus(projectName, ownerName, done);
+        return tasksInProject;
+    }
 }

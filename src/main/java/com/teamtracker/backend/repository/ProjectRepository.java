@@ -5,7 +5,8 @@ import com.teamtracker.backend.domain.User;
 import org.springframework.data.repository.CrudRepository;
 
 public interface ProjectRepository extends CrudRepository<Project,Long> {
-  Project findByProjectName(String projectName);
   Iterable<Project> findByOwner(User owner);
   Project findByOwnerNameAndProjectName(String ownerName, String projectName);
+  Iterable<Project> deleteByProjectNameAndOwnerName(String projectName,String ownerName);
+
 }

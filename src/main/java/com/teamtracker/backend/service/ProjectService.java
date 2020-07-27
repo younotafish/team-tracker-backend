@@ -20,48 +20,41 @@ public class ProjectService {
   private UserRepository userRepository;
 
 
-  public Project saveOrUpdateProject(Project project) {
+  public Project saveProject(Project project) {
     if (project.getProjectName() != null) {
-      Project existingProject = projectRepository.findByProjectName(project.getProjectName());
-      if (existingProject != null && (existingProject.getOwner().getUserName()
-          .equals(project.getOwnerName()))) {
-        return projectRepository.save(existingProject);
+      Project existingProject = projectRepository.findByOwnerNameAndProjectName(project.getOwnerName(), project.getProjectName());
+      if (existingProject != null) {
+        throw new ProjectNameException(
+                "The project " + project.getProjectName() + " in this account has already existed.");
       }
-//        else if(existingProject == null){
-//          throw new ProjectNotFoundException("Project with name: "+ project.getProjectName()+ " can not be update");
-//        }
     }
-    try {
+
       User theUser = userRepository.findByUserName(project.getOwnerName());
       project.setOwner(theUser);
       return projectRepository.save(project);
-    } catch (Exception exception) {
-      throw new ProjectNameException(
-          "Project with name " + project.getProjectName() + "already exist.");
-    }
-
-
   }
 
-  public Project findByProjectName(String projectName) {
-    Project project = projectRepository.findByProjectName(projectName);
-    if (project == null) {
-      throw new ProjectNameException("Project name " + projectName + " does not exist.");
+  public Project findByOwnerNameAndProjectName(String ownerName, String projectName) {
+    Project foundProject = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
+    if (foundProject == null) {
+      throw new ProjectNameException("Project " + projectName + " does not exist.");
     }
-    return project;
+    return foundProject;
   }
 
+//  没用
   public Iterable<Project> findAllProject() {
     return projectRepository.findAll();
   }
 
-  public void deleteProjectByName(String projectName) {
-    Project project = projectRepository.findByProjectName(projectName);
-    if (project == null) {
+  public Iterable<Project> deleteProjectByProjectNameAndOwnerName(String projectName, String ownerName) {
+    Project foundProject = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
+    if (foundProject == null) {
       throw new ProjectNameException(
-          "Can not delete project with name " + projectName + ". This project does not exist");
+          "Can not delete project " + projectName + " because this project does not exist");
     }
-    projectRepository.delete(project);
+    Iterable<Project> projectsAfterDelete = projectRepository.deleteByProjectNameAndOwnerName(projectName, ownerName);
+    return projectsAfterDelete;
   }
 
   public Iterable<Project> findAllByUser(User user) {
@@ -71,10 +64,6 @@ public class ProjectService {
 
   public Iterable<Project> findAllByPar(User parUser) {
     return parUser.getProjectParticipated();
-  }
-
-  public Project findByOwnerNameAndProjectName(String ownerName, String projectName) {
-    return projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
   }
 
   public Project addParticipant(String participantName, String ownerName, String projectName) {

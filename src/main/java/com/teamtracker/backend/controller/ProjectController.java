@@ -42,24 +42,42 @@ public class ProjectController {
     if (errMap != null) {
       return errMap;
     }
-    Project project1 = projectService.saveOrUpdateProject(project);
+    Project project1 = projectService.saveProject(project);
     return new ResponseEntity<Project>(project1, HttpStatus.OK);
   }
 
-  @GetMapping("/{projectName}")
-  public ResponseEntity<?> getProjectByName(@PathVariable String projectName) {
-    Project project = projectService.findByProjectName(projectName);
-    return new ResponseEntity<Project>(project, HttpStatus.OK);
+  @GetMapping("/getByProjectNameAndOwnerName")
+  public ResponseEntity<?> getProjectByProjectNameAndOwnerName(
+          @RequestParam(name = "projectName") String projectName,
+          @RequestParam(name = "ownerName") String ownerName
+  ) {
+    Project foundProject = projectService.findByOwnerNameAndProjectName(ownerName, projectName);
+    return new ResponseEntity<Project>(foundProject, HttpStatus.OK);
   }
 
+//  没用
   @GetMapping("/all")
   public Iterable<Project> getAllProject() {
     return projectService.findAllProject();
   }
 
-  @DeleteMapping("/{projectName}")
-  public void deleteProjectByName(@PathVariable String projectName) {
-    projectService.deleteProjectByName(projectName);
+// 有问题
+//  @DeleteMapping("/deleteByProjectNameAndOwnerName")
+//  public ResponseEntity<Iterable<Project>> deleteProjectByName(
+//          @RequestParam(name = "projectName") String projectName,
+//          @RequestParam(name = "ownerName") String ownerName
+//  ) {
+//    Iterable<Project> projectsAfterDelete = projectService.deleteProjectByProjectNameAndOwnerName(projectName, ownerName);
+//    return new ResponseEntity<Iterable<Project>>(projectsAfterDelete, HttpStatus.OK);
+//  }
+  @DeleteMapping("/deleteByProjectNameAndOwnerName")
+  public Iterable<Project> deleteProjectByName(
+          @RequestParam(name = "projectName") String projectName,
+          @RequestParam(name = "ownerName") String ownerName
+  ) {
+    Iterable<Project> projectsAfterDelete = projectService.deleteProjectByProjectNameAndOwnerName(projectName, ownerName);
+    return projectsAfterDelete;
+
   }
 
   @GetMapping("/own/{ownerName}")
