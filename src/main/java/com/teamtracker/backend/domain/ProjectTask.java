@@ -19,38 +19,39 @@ import javax.validation.constraints.NotNull;
 public class ProjectTask {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
+//  @Column(name = "id")
   private Long id;
-  @Column(name = "task_name")
+//  @Column(name = "task_name")
   private String taskName;
-  @Column(name = "task_description")
+//  @Column(name = "task_description")
   private String taskDescription;
-  @Column(name = "status")
+//  @Column(name = "status")
   private String status;
   @NotNull
-  @Column(name = "project_name")
+//  @Column(name = "project_name")
   private String projectName;
   @NotNull
-  @Column(name = "owner_name")
+//  @Column(name = "owner_name")
   private String ownerName;
 
   @ManyToOne
-  @JoinColumn(name = "project_id",nullable = false)
+//  @JoinColumn(name = "project_id",nullable = false)
+  @JoinColumn(name = "projectId",nullable = false)
 //  @Column(name = "project")
   @JsonIgnore
   private Project project;
 
   @JsonFormat(pattern = "yyyy-mm--dd")
-  @Column(name = "start_date")
+//  @Column(name = "start_date")
   private Date startDate;
   @JsonFormat(pattern = "yyyy-mm--dd")
-  @Column(name = "end_date")
+//  @Column(name = "end_date")
   private Date endDate;
   @JsonFormat(pattern = "yyyy-mm--dd")
-  @Column(name = "create_at")
+//  @Column(name = "create_at")
   private Date createdAt;
   @JsonFormat(pattern = "yyyy-mm--dd")
-  @Column(name = "upate_at")
+//  @Column(name = "update_at")
   private Date updateAt;
   //  private String priority;
 

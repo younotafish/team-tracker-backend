@@ -11,17 +11,17 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
+//  @Column(name = "id")
   private Long id;
-  @Column(name = "user_name")
+//  @Column(name = "user_name")
   private String userName; //从微信可以获取哪些？
 
 
 ////  @ManyToMany(mappedBy = "partners",cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 //  private List<Project> projectsInvolvedIn;
-  @Column(name = "create_at")
+//  @Column(name = "create_at")
   private Date createdAt;
-  @Column(name = "update_at")
+//  @Column(name = "update_at")
   private Date updatedAt;
 
 //  @Column(name = "project_owned")
@@ -30,13 +30,17 @@ public class User {
 
   @ManyToMany()
   @JoinTable(
-      name="user_project",
-      joinColumns = @JoinColumn(name="user_id"),
-      inverseJoinColumns = @JoinColumn(name = "project_id")
+//      name="user_project",
+//      joinColumns = @JoinColumn(name="user_id"),
+//      inverseJoinColumns = @JoinColumn(name = "project_id")
+          name="userProject",
+          joinColumns = @JoinColumn(name="userId"),
+          inverseJoinColumns = @JoinColumn(name = "projectId")
   )
 //  @Column(name = "project_participated")
   @JsonIgnore
   private List<Project> projectParticipated;
+
 
 
 
