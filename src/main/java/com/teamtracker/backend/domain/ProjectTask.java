@@ -19,11 +19,13 @@ import javax.validation.constraints.NotNull;
 public class ProjectTask {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
   private Long id;
   @Column(name = "task_name")
   private String taskName;
   @Column(name = "task_description")
   private String taskDescription;
+  @Column(name = "status")
   private String status;
   @NotNull
   @Column(name = "project_name")
@@ -34,6 +36,7 @@ public class ProjectTask {
 
   @ManyToOne
   @JoinColumn(name = "project_id",nullable = false)
+//  @Column(name = "project")
   @JsonIgnore
   private Project project;
 
@@ -49,7 +52,7 @@ public class ProjectTask {
   @JsonFormat(pattern = "yyyy-mm--dd")
   @Column(name = "upate_at")
   private Date updateAt;
-
+  //  private String priority;
 
 
 
@@ -60,15 +63,6 @@ public class ProjectTask {
   public void setProject(Project project) {
     this.project = project;
   }
-
-//  public UUID getUuid() {
-//    return uuid;
-//  }
-//
-//
-//  public void setUuid(UUID uuid) {
-//    this.uuid = uuid;
-//  }
 
   public String getTaskName() {
     return taskName;
@@ -93,8 +87,6 @@ public class ProjectTask {
   public void setOwnerName(String ownerName) {
     this.ownerName = ownerName;
   }
-
-//  private String priority;
 
   public ProjectTask() {
   }

@@ -11,6 +11,7 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
   private Long id;
   @Column(name = "user_name")
   private String userName; //从微信可以获取哪些？
@@ -23,6 +24,7 @@ public class User {
   @Column(name = "update_at")
   private Date updatedAt;
 
+//  @Column(name = "project_owned")
   @OneToMany(fetch = FetchType.LAZY,mappedBy = "owner")
   private List<Project> projectOwned;
 
@@ -32,10 +34,11 @@ public class User {
       joinColumns = @JoinColumn(name="user_id"),
       inverseJoinColumns = @JoinColumn(name = "project_id")
   )
-
-  @Column(name = "project_participated")
+//  @Column(name = "project_participated")
   @JsonIgnore
   private List<Project> projectParticipated;
+
+
 
   public List<Project> getProjectOwned() {
     return projectOwned;

@@ -25,6 +25,7 @@ import org.hibernate.mapping.ToOne;
 public class Project {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
   private Long id;
   @NotNull
   @Column(name = "project_name")
@@ -53,6 +54,7 @@ public class Project {
 
   @ManyToOne
   @JoinColumn(name = "project_id")
+//  @Column(name = "owner")
   @JsonIgnore
   private User owner;
 
@@ -62,9 +64,11 @@ public class Project {
       joinColumns = {@JoinColumn(name="project_id")},
       inverseJoinColumns = @JoinColumn(name = "user_id")
   )
+//  @Column(name = "partners")
   @JsonIgnore
   private List<User> partners;
 
+//  @Column(name = "tasks_contained")
   @OneToMany(mappedBy = "project")
   private List<ProjectTask> tasksContained;
 
