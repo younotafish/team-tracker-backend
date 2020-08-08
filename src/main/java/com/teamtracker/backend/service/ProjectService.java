@@ -37,12 +37,12 @@ public class ProjectService {
     return projectRepository.save(project);
   }
 
-  public Project findByOwnerNameAndProjectName(String ownerName, String projectName) {
-    Project foundProject = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
-    if (foundProject == null) {
+  public Iterable<Project> findByOwnerNameAndProjectName(String ownerName, String projectName) {
+    Iterable<Project> foundProjects = projectRepository.findByOwnerNameAndProjectNameContains(ownerName, projectName);
+    if (foundProjects == null) {
       throw new ProjectNameException("Project " + projectName + " does not exist.");
     }
-    return foundProject;
+    return foundProjects;
   }
 
   //  没用

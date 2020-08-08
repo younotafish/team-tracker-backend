@@ -63,8 +63,9 @@ public class ProjectController {
     }
     String ownerName = jsonMap.get("ownerName");
     String projectName = jsonMap.get("projectName");
-    Project foundProject = projectService.findByOwnerNameAndProjectName(ownerName, projectName);
-    return new ResponseEntity<Project>(foundProject, HttpStatus.OK);
+
+    Iterable<Project> foundProjects = projectService.findByOwnerNameAndProjectName(ownerName, projectName);
+    return new ResponseEntity<Iterable<Project>>(foundProjects, HttpStatus.OK);
   }
 
 //  没用
@@ -83,7 +84,10 @@ public class ProjectController {
     String ownerName = jsonMap.get("ownerName");
     String projectName = jsonMap.get("projectName");
     projectService.deleteProjectByProjectNameAndOwnerName(projectName, ownerName);
-    return new ResponseEntity<String>("already deleted", HttpStatus.OK);
+    // get the exact user
+    User theUser = userService.findByUserName(ownerName);
+    Iterable<Project> projectsByOwner = projectService.findAllByUser(theUser);
+    return new ResponseEntity<Iterable<Project>>(projectsByOwner, HttpStatus.OK);
   }
 
   @GetMapping("/own/{ownerName}")
