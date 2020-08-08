@@ -14,6 +14,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c42e3389-daa5-4544-8232-cdbd10269175" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/Project.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/ProjectTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/ProjectTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

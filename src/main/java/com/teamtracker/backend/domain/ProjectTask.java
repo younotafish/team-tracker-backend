@@ -20,14 +20,16 @@ public class ProjectTask {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-//  private UUID uuid;
+  @Column(name = "task_name")
   private String taskName;
-
+  @Column(name = "task_description")
   private String taskDescription;
   private String status;
   @NotNull
+  @Column(name = "project_name")
   private String projectName;
   @NotNull
+  @Column(name = "owner_name")
   private String ownerName;
 
   @ManyToOne
@@ -36,12 +38,16 @@ public class ProjectTask {
   private Project project;
 
   @JsonFormat(pattern = "yyyy-mm--dd")
+  @Column(name = "start_date")
   private Date startDate;
   @JsonFormat(pattern = "yyyy-mm--dd")
+  @Column(name = "end_date")
   private Date endDate;
   @JsonFormat(pattern = "yyyy-mm--dd")
+  @Column(name = "create_at")
   private Date createdAt;
   @JsonFormat(pattern = "yyyy-mm--dd")
+  @Column(name = "upate_at")
   private Date updateAt;
 
 

@@ -27,19 +27,26 @@ public class Project {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @NotNull
+  @Column(name = "project_name")
   private String projectName;
+  @Column(name = "project_description")
   private String projectDescription;
 
   @JsonFormat(pattern = "yyyy-mm-dd")
+  @Column(name = "start_date")
   private Date startDate;
   @JsonFormat(pattern = "yyyy-mm-dd")
+  @Column(name = "end_date")
   private Date endDate;
   @JsonFormat(pattern = "yyyy-mm-dd")
+  @Column(name = "create_at")
   private Date createdAt;
   @JsonFormat(pattern = "yyyy-mm-dd")
+  @Column(name = "update_at")
   private Date updatedAt;
 // ownerName
   @NotNull
+  @Column(name = "owner_name")
   private String ownerName;
 
 

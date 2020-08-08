@@ -4,18 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import javax.persistence.*;
 
 @Entity
 public class User {
@@ -23,19 +12,19 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
+  @Column(name = "user_name")
   private String userName; //从微信可以获取哪些？
 
 
 ////  @ManyToMany(mappedBy = "partners",cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 //  private List<Project> projectsInvolvedIn;
-
+  @Column(name = "create_at")
   private Date createdAt;
-
+  @Column(name = "update_at")
   private Date updatedAt;
 
   @OneToMany(fetch = FetchType.LAZY,mappedBy = "owner")
-  private List<Project> projectOwned = new ArrayList<>();
+  private List<Project> projectOwned;
 
   @ManyToMany()
   @JoinTable(
@@ -44,6 +33,7 @@ public class User {
       inverseJoinColumns = @JoinColumn(name = "project_id")
   )
 
+  @Column(name = "project_participated")
   @JsonIgnore
   private List<Project> projectParticipated;
 
