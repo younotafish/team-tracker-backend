@@ -22,10 +22,12 @@ public class ProjectTask {
 //  @Column(name = "id")
   private Long id;
 //  @Column(name = "task_name")
+  @NotNull
   private String taskName;
 //  @Column(name = "task_description")
   private String taskDescription;
 //  @Column(name = "status")
+  @NotNull
   private String status;
   @NotNull
 //  @Column(name = "project_name")

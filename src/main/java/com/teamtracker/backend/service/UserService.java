@@ -2,6 +2,8 @@ package com.teamtracker.backend.service;
 
 import com.teamtracker.backend.domain.Project;
 import com.teamtracker.backend.domain.User;
+import com.teamtracker.backend.exceptions.ProjectNameException;
+import com.teamtracker.backend.exceptions.ProjectNotFoundException;
 import com.teamtracker.backend.exceptions.UserNameException;
 import com.teamtracker.backend.repository.ProjectRepository;
 import com.teamtracker.backend.repository.UserRepository;
@@ -31,11 +33,22 @@ public class UserService {
   }
 
 
-  public Iterable<User> getCollaboratorsByProject(Project project){
-    Project project1 = projectRepository.findByOwnerNameAndProjectName(project.getOwnerName(),project.getProjectName());
-    List<User> partners = project1.getPartners();
+  public Iterable<User> getPartnersByProject(Project project){
+    Project foundProject = projectRepository.findByOwnerNameAndProjectName(project.getOwnerName(),project.getProjectName());
+    if (foundProject == null) {
+      throw new ProjectNotFoundException("The project" + project.getProjectName() + " does not exist.");
+    }
+    List<User> partners = foundProject.getPartners();
     return partners;
+  }
 
+  public Iterable<User> getPartnersByProjectNameAndOwnerName(String projectName, String ownerName){
+    Project foundProject = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
+    if (foundProject == null) {
+      throw new ProjectNotFoundException("The project" + projectName + " does not exist.");
+    }
+    List<User> partners = foundProject.getPartners();
+    return partners;
   }
 
 //  public User findByParName(String parName){

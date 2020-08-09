@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class User {
@@ -14,35 +15,46 @@ public class User {
 //  @Column(name = "id")
   private Long id;
 //  @Column(name = "user_name")
+  @NotNull
   private String userName; //从微信可以获取哪些？
 
 
 ////  @ManyToMany(mappedBy = "partners",cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 //  private List<Project> projectsInvolvedIn;
+
 //  @Column(name = "create_at")
   private Date createdAt;
 //  @Column(name = "update_at")
   private Date updatedAt;
 
+  // 这里有个问题：在get到partners的controller里面，return可以获得partners们的projectsOwned
+  // 会不会造成数据泄露？？？
 //  @Column(name = "project_owned")
   @OneToMany(fetch = FetchType.LAZY,mappedBy = "owner")
   private List<Project> projectOwned;
 
+  //  @Column(name = "project_participated")
   @ManyToMany()
   @JoinTable(
 //      name="user_project",
 //      joinColumns = @JoinColumn(name="user_id"),
 //      inverseJoinColumns = @JoinColumn(name = "project_id")
-          name="userProject",
-          joinColumns = @JoinColumn(name="userId"),
-          inverseJoinColumns = @JoinColumn(name = "projectId")
+      name="userProject",
+      joinColumns = @JoinColumn(name="userId"),
+      inverseJoinColumns = @JoinColumn(name = "projectId")
   )
-//  @Column(name = "project_participated")
   @JsonIgnore
   private List<Project> projectParticipated;
 
 
 
+
+  public User() {
+  }
+
+  public User(String userName) {
+    this.userName = userName;
+  }
 
   public List<Project> getProjectOwned() {
     return projectOwned;
@@ -59,13 +71,6 @@ public class User {
   public void setProjectParticipated(
       List<Project> projectParticipated) {
     this.projectParticipated = projectParticipated;
-  }
-
-  public User() {
-  }
-
-  public User(String userName) {
-    this.userName = userName;
   }
 
   @PrePersist

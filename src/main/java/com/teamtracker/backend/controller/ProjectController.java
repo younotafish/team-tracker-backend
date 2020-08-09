@@ -55,7 +55,7 @@ public class ProjectController {
 //    return new ResponseEntity<Project>(foundProject, HttpStatus.OK);
 //  }
 
-  @GetMapping("/byProjectNameAndOwnerName")
+  @PostMapping("/byProjectNameAndOwnerName")
   public ResponseEntity<?> getProjectByProjectNameAndOwnerName(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
     ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
     if (errMap != null) {
@@ -64,11 +64,11 @@ public class ProjectController {
     String ownerName = jsonMap.get("ownerName");
     String projectName = jsonMap.get("projectName");
 
-    Iterable<Project> foundProjects = projectService.findByOwnerNameAndProjectName(ownerName, projectName);
-    return new ResponseEntity<Iterable<Project>>(foundProjects, HttpStatus.OK);
+    Project foundProject = projectService.findByOwnerNameAndProjectName(ownerName, projectName);
+    return new ResponseEntity<Project>(foundProject, HttpStatus.OK);
   }
 
-//  没用
+//  没用的controller方法
   @GetMapping("/all")
   public ResponseEntity<Iterable<Project>> getAllProject() {
     Iterable<Project> allProject = projectService.findAllProject();
@@ -76,7 +76,10 @@ public class ProjectController {
   }
 
   @DeleteMapping("/byProjectNameAndOwnerName")
-  public ResponseEntity<?> deleteProjectByName(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
+  public ResponseEntity<?> deleteProjectByProjectNameAndOwnerName(
+          @Valid @RequestBody Map<String,
+                  String> jsonMap, BindingResult result
+  ) {
     ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
     if (errMap != null) {
       return errMap;
@@ -85,23 +88,15 @@ public class ProjectController {
     String projectName = jsonMap.get("projectName");
     projectService.deleteProjectByProjectNameAndOwnerName(projectName, ownerName);
     // get the exact user
-    User theUser = userService.findByUserName(ownerName);
-    Iterable<Project> projectsByOwner = projectService.findAllByUser(theUser);
+//    User owner = userService.findByUserName(ownerName);
+    Iterable<Project> projectsByOwner = projectService.findAllByOwnerName(ownerName);
     return new ResponseEntity<Iterable<Project>>(projectsByOwner, HttpStatus.OK);
   }
 
   @GetMapping("/own/{ownerName}")
   public ResponseEntity<Iterable<Project>> getAllProjectByOwnerName(@PathVariable String ownerName) {
-    User theUser = userService.findByUserName(ownerName);
-    Iterable<Project> projectsByOwner = projectService.findAllByUser(theUser);
+    Iterable<Project> projectsByOwner = projectService.findAllByOwnerName(ownerName);
     return new ResponseEntity<Iterable<Project>>(projectsByOwner, HttpStatus.OK);
-  }
-
-  @GetMapping("/par/{parName}")
-  public ResponseEntity<Iterable<Project>> getAllProjectByParName(@PathVariable String parName) {
-    User theUser = userService.findByUserName(parName);
-    Iterable<Project> projectsByPar = projectService.findAllByPar(theUser);
-    return new ResponseEntity<Iterable<Project>>(projectsByPar, HttpStatus.OK);
   }
 
   @PostMapping("/engage")
@@ -110,22 +105,45 @@ public class ProjectController {
     if (errMap != null) {
       return errMap;
     }
-    String participantName = jsonMap.get("participantName");
+    String partnerName = jsonMap.get("partnerName"); //这里participantName改成了partnerName
     String ownerName = jsonMap.get(("ownerName"));
     String projectName = jsonMap.get("projectName");
 
-    Project project1 = projectService.addParticipant(participantName, ownerName, projectName);
+    Project updatedProject = projectService.addPartner(partnerName, ownerName, projectName);
 
-    return new ResponseEntity<Project>(project1, HttpStatus.OK);
+    return new ResponseEntity<Project>(updatedProject, HttpStatus.OK);
   }
 
-  @GetMapping("/collaborators")
+  @GetMapping("/par/{parName}")
+  public ResponseEntity<Iterable<Project>> getAllProjectByParName(@PathVariable String parName) {
+    User partner = userService.findByUserName(parName);
+    Iterable<Project> projectsByPartner = projectService.findAllByPartner(partner);
+    return new ResponseEntity<Iterable<Project>>(projectsByPartner, HttpStatus.OK);
+  }
+
+  //user controller
+
+  // 这个方法是通过Project得到这个project的partners
+  @GetMapping("/partnersByProject")
   public ResponseEntity<?> getAllCollaborators(@Valid @RequestBody Project project, BindingResult result) {
     ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
     if (errMap != null) {
       return errMap;
     }
-    Iterable<User> collaborators = userService.getCollaboratorsByProject(project);
+    Iterable<User> collaborators = userService.getPartnersByProject(project);
+    return new ResponseEntity<Iterable<User>>(collaborators, HttpStatus.OK);
+  }
+
+  // 这个方法是通过projectName和ownerName得到这个project的partners
+  @GetMapping("/partnersByProjectNameAndOwnerName")
+  public ResponseEntity<?> getAllCollaborators(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
+    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+    if (errMap != null) {
+      return errMap;
+    }
+    String ownerName = jsonMap.get(("ownerName"));
+    String projectName = jsonMap.get("projectName");
+    Iterable<User> collaborators = userService.getPartnersByProjectNameAndOwnerName(projectName, ownerName);
     return new ResponseEntity<Iterable<User>>(collaborators, HttpStatus.OK);
   }
 }

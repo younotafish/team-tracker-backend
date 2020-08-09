@@ -28,48 +28,44 @@ public class Project {
 //  @Column(name = "id")
   private Long id;
   @NotNull
-//  @Column(name = "project_name")
+  //  @Column(name = "project_name")
   private String projectName;
-//  @Column(name = "project_description")
+  //  @Column(name = "owner_name")
+  @NotNull
+  private String ownerName;
+  //  @Column(name = "project_description")
   private String projectDescription;
 
   @JsonFormat(pattern = "yyyy-mm-dd")
-//  @Column(name = "start_date")
+  //  @Column(name = "start_date")
   private Date startDate;
   @JsonFormat(pattern = "yyyy-mm-dd")
-//  @Column(name = "end_date")
+  //  @Column(name = "end_date")
   private Date endDate;
   @JsonFormat(pattern = "yyyy-mm-dd")
-//  @Column(name = "create_at")
+  //  @Column(name = "create_at")
   private Date createdAt;
   @JsonFormat(pattern = "yyyy-mm-dd")
-//  @Column(name = "update_at")
+  //  @Column(name = "update_at")
   private Date updatedAt;
-// ownerName
-  @NotNull
-//  @Column(name = "owner_name")
-  private String ownerName;
 
-
-
-  @ManyToOne
-//  @JoinColumn(name = "project_id")
-  @JoinColumn(name = "projectId")
-//  @Column(name = "owner")
+  //  @Column(name = "owner")
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "projectId", nullable = false)
   @JsonIgnore
   private User owner;
 
-  @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
-  @JoinTable(
-//      name = "user_project",
+  //      name = "user_project",
 //      joinColumns = {@JoinColumn(name="project_id")},
 //      inverseJoinColumns = @JoinColumn(name = "user_id")
+  @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+  @JoinTable(
           name = "userProject",
           joinColumns = {@JoinColumn(name="projectId")},
           inverseJoinColumns = @JoinColumn(name = "userId")
   )
 //  @Column(name = "partners")
-  @JsonIgnore
+  @JsonIgnore // 这里要不要ignore啊？？？
   private List<User> partners;
 
 //  @Column(name = "tasks_contained")
