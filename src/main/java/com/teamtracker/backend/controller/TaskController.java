@@ -40,8 +40,8 @@ public class TaskController {
     if (errMap != null) {
       return errMap;
     }
-    ProjectTask newProjectTask = taskService.createOrUpdateTaskByIncomingTask(projectTask);
-    return new ResponseEntity<ProjectTask>(newProjectTask, HttpStatus.OK);
+    Iterable<ProjectTask> updatedTasks = taskService.createOrUpdateTaskByIncomingTask(projectTask);
+    return new ResponseEntity<Iterable<ProjectTask>>(updatedTasks, HttpStatus.OK);
   }
   @PostMapping("/tasksByProject")
   public ResponseEntity<?> getTasksByProject(@Valid @RequestBody Project project, BindingResult result){
@@ -90,8 +90,8 @@ public class TaskController {
     if (errMap != null) {
       return errMap;
     }
-    ProjectTask newProjectTask = taskService.createOrUpdateTaskByIncomingTask(projectTask);
-    return new ResponseEntity<ProjectTask>(newProjectTask, HttpStatus.OK);
+    Iterable<ProjectTask> updatedTasks = taskService.createOrUpdateTaskByIncomingTask(projectTask);
+    return new ResponseEntity<Iterable<ProjectTask>>(updatedTasks, HttpStatus.OK);
   }
 
 }

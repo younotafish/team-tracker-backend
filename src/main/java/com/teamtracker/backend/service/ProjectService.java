@@ -9,6 +9,7 @@ import com.teamtracker.backend.repository.ProjectRepository;
 import com.teamtracker.backend.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,7 +79,21 @@ public class ProjectService {
   }
 
   public Iterable<Project> findAllByOwnerName(String ownerName) {
-    return projectRepository.findByOwnerName(ownerName);
+    // 如果没有这个user，自动创建一个user
+    User owner = userRepository.findByUserName(ownerName);
+    if (owner == null) {
+      User newUser = new User(ownerName);
+      owner = userRepository.save(newUser);
+      // 返回个空的呗
+      return new Iterable<Project>() {
+        @Override
+        public Iterator<Project> iterator() {
+          return null;
+        }
+      };
+    } else {
+      return projectRepository.findByOwnerName(ownerName);
+    }
   }
 
   public Project addPartner(String partnerName, String ownerName, String projectName) {

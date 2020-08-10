@@ -24,7 +24,7 @@ public class TaskService {
   @Autowired
   ProjectTaskRepository projectTaskRepository;
 
-  public ProjectTask createOrUpdateTaskByIncomingTask(ProjectTask projectTask){
+  public Iterable<ProjectTask> createOrUpdateTaskByIncomingTask(ProjectTask projectTask){
       // 可以加一个对owner是否为null的验证以及抛出异常，也可以不加
       Project project = projectRepository.findByOwnerNameAndProjectName(projectTask.getOwnerName(),projectTask.getProjectName());
       if(project == null){
@@ -38,6 +38,8 @@ public class TaskService {
         // 更新project里面的tasksContained
         List<ProjectTask> oldTasks = project.getTasksContained();
         oldTasks.add(projectTask);
+        projectRepository.save(project);
+        ProjectTask savedProjectTask = projectTaskRepository.save(projectTask);
       }
       else{
 //      更新一个任务
@@ -54,10 +56,11 @@ public class TaskService {
                 break;
             }
         }
+        projectRepository.save(project);
+        ProjectTask savedProjectTask = projectTaskRepository.save(projectTask);
       }
-      projectRepository.save(project);
-      ProjectTask savedProject = projectTaskRepository.save(projectTask);
-      return savedProject;
+      Iterable<ProjectTask> updatedtasksContained = project.getTasksContained();
+      return updatedtasksContained;
   }
 
   public Iterable<ProjectTask> getTasksByProject(Project project){

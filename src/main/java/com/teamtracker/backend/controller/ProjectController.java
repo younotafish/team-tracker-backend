@@ -105,7 +105,7 @@ public class ProjectController {
     if (errMap != null) {
       return errMap;
     }
-    String partnerName = jsonMap.get("partnerName"); //这里participantName改成了partnerName
+    String partnerName = jsonMap.get("participantName");
     String ownerName = jsonMap.get(("ownerName"));
     String projectName = jsonMap.get("projectName");
 
@@ -124,7 +124,7 @@ public class ProjectController {
   //user controller
 
   // 这个方法是通过Project得到这个project的partners
-  @GetMapping("/partnersByProject")
+  @GetMapping("/collaborators")
   public ResponseEntity<?> getAllCollaborators(@Valid @RequestBody Project project, BindingResult result) {
     ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
     if (errMap != null) {
@@ -134,16 +134,16 @@ public class ProjectController {
     return new ResponseEntity<Iterable<User>>(collaborators, HttpStatus.OK);
   }
 
-  // 这个方法是通过projectName和ownerName得到这个project的partners
-  @GetMapping("/partnersByProjectNameAndOwnerName")
-  public ResponseEntity<?> getAllCollaborators(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
-    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
-    if (errMap != null) {
-      return errMap;
-    }
-    String ownerName = jsonMap.get(("ownerName"));
-    String projectName = jsonMap.get("projectName");
-    Iterable<User> collaborators = userService.getPartnersByProjectNameAndOwnerName(projectName, ownerName);
-    return new ResponseEntity<Iterable<User>>(collaborators, HttpStatus.OK);
-  }
+  // 这个方法是通过projectName和ownerName得到这个project的partners，先注释掉不用吧
+//  @GetMapping("/partnersByProjectNameAndOwnerName")
+//  public ResponseEntity<?> getAllCollaborators(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
+//    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+//    if (errMap != null) {
+//      return errMap;
+//    }
+//    String ownerName = jsonMap.get(("ownerName"));
+//    String projectName = jsonMap.get("projectName");
+//    Iterable<User> collaborators = userService.getPartnersByProjectNameAndOwnerName(projectName, ownerName);
+//    return new ResponseEntity<Iterable<User>>(collaborators, HttpStatus.OK);
+//  }
 }
