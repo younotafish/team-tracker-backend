@@ -38,18 +38,20 @@ public class ProjectService {
     // owner之前没有在数据库中存过
     if (owner == null) {
       owner = new User(project.getOwnerName());
-      List<Project> projectList = new ArrayList<>();
-      projectList.add(project);
-      owner.setProjectOwned(projectList);
-      project.setOwner(owner);
+//      List<Project> projectList = new ArrayList<>();
+//      projectList.add(project);
+//      owner.setProjectOwned(projectList);
+//      project.setOwner(owner);
     // owner在数据库中有过，也就是这个owner有过别的项目
-    } else {
-      List<Project> projectList = owner.getProjectOwned();
-      projectList.add(project);
-      owner.setProjectOwned(projectList);
-      project.setOwner(owner);
     }
-    User savedOwner = userRepository.save(owner);
+//    else {
+//      List<Project> projectList = owner.getProjectOwned();
+//      projectList.add(project);
+//      owner.setProjectOwned(projectList);
+//      project.setOwner(owner);
+//    }
+    project.setOwner(owner);
+    User savedOwner = userRepository.save(owner); // 要不要加
     Project savedProject = projectRepository.save(project);
     return savedProject;
   }

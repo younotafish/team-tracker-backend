@@ -35,29 +35,14 @@ public class TaskService {
       if(oldProjectTask == null){
 //      新建一个任务
         projectTask.setProject(project);
-        // 更新project里面的tasksContained
-        List<ProjectTask> oldTasks = project.getTasksContained();
-        oldTasks.add(projectTask);
-        projectRepository.save(project);
-        ProjectTask savedProjectTask = projectTaskRepository.save(projectTask);
+        projectTaskRepository.save(projectTask);
       }
       else{
 //      更新一个任务
         oldProjectTask.setTaskName(projectTask.getTaskName());
         oldProjectTask.setTaskDescription(projectTask.getTaskDescription());
         oldProjectTask.setStatus(projectTask.getStatus());
-        List<ProjectTask> oldTasks = project.getTasksContained();
-        // 更新project里面的tasksContained
-        for (ProjectTask task: oldTasks) {
-            if (task.getOwnerName() == oldProjectTask.getOwnerName()
-                    && task.getProjectName() == oldProjectTask.getProjectName()) {
-                oldTasks.remove(task);
-                oldTasks.add(oldProjectTask);
-                break;
-            }
-        }
-        projectRepository.save(project);
-        ProjectTask savedProjectTask = projectTaskRepository.save(projectTask);
+        projectTaskRepository.save(oldProjectTask);
       }
       Iterable<ProjectTask> updatedtasksContained = project.getTasksContained();
       return updatedtasksContained;

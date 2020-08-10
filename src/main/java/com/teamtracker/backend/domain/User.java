@@ -22,11 +22,6 @@ public class User {
 ////  @ManyToMany(mappedBy = "partners",cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 //  private List<Project> projectsInvolvedIn;
 
-//  @Column(name = "create_at")
-  private Date createdAt;
-//  @Column(name = "update_at")
-  private Date updatedAt;
-
   // 这里有个问题：在get到partners的controller里面，return可以获得partners们的projectsOwned
   // 会不会造成数据泄露？？？
 //  @Column(name = "project_owned")
@@ -36,15 +31,20 @@ public class User {
   //  @Column(name = "project_participated")
   @ManyToMany()
   @JoinTable(
-//      name="user_project",
-//      joinColumns = @JoinColumn(name="user_id"),
-//      inverseJoinColumns = @JoinColumn(name = "project_id")
-      name="userProject",
-      joinColumns = @JoinColumn(name="userId"),
-      inverseJoinColumns = @JoinColumn(name = "projectId")
+      name="user_project",
+      joinColumns = @JoinColumn(name="user_id"),
+      inverseJoinColumns = @JoinColumn(name = "project_id")
+//      name="userProject",
+//      joinColumns = @JoinColumn(name="userId"),
+//      inverseJoinColumns = @JoinColumn(name = "projectId")
   )
   @JsonIgnore
   private List<Project> projectParticipated;
+
+//  //  @Column(name = "create_at")
+//  private Date createdAt;
+//  //  @Column(name = "update_at")
+//  private Date updatedAt;
 
 
 
@@ -73,17 +73,6 @@ public class User {
     this.projectParticipated = projectParticipated;
   }
 
-  @PrePersist
-  protected void onCreate() {
-    this.createdAt = new Date();
-  }
-
-  @PreUpdate
-  protected void onUpdate() {
-    this.updatedAt = new Date();
-  }
-
-
   public Long getId() {
     return id;
   }
@@ -101,27 +90,37 @@ public class User {
   }
 
 
-  public Date getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public Date getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = updatedAt;
-  }
-
 //  public List<Project> getProjectList() {
 //    return projectList;
 //  }
 //
 //  public void setProjectList(List<Project> projectList) {
 //    this.projectList = projectList;
+//  }
+
+//  @PrePersist
+//  protected void onCreate() {
+//    this.createdAt = new Date();
+//  }
+//
+//  @PreUpdate
+//  protected void onUpdate() {
+//    this.updatedAt = new Date();
+//  }
+//
+//  public Date getCreatedAt() {
+//    return createdAt;
+//  }
+//
+//  public void setCreatedAt(Date createdAt) {
+//    this.createdAt = createdAt;
+//  }
+//
+//  public Date getUpdatedAt() {
+//    return updatedAt;
+//  }
+//
+//  public void setUpdatedAt(Date updatedAt) {
+//    this.updatedAt = updatedAt;
 //  }
 }

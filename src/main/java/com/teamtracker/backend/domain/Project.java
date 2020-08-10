@@ -36,36 +36,32 @@ public class Project {
   //  @Column(name = "project_description")
   private String projectDescription;
 
-  @JsonFormat(pattern = "yyyy-mm-dd")
-  //  @Column(name = "start_date")
-  private Date startDate;
-  @JsonFormat(pattern = "yyyy-mm-dd")
-  //  @Column(name = "end_date")
-  private Date endDate;
-  @JsonFormat(pattern = "yyyy-mm-dd")
-  //  @Column(name = "create_at")
-  private Date createdAt;
-  @JsonFormat(pattern = "yyyy-mm-dd")
-  //  @Column(name = "update_at")
-  private Date updatedAt;
+//  @JsonFormat(pattern = "yyyy-mm-dd")
+//  //  @Column(name = "start_date")
+//  private Date startDate;
+//  @JsonFormat(pattern = "yyyy-mm-dd")
+//  //  @Column(name = "end_date")
+//  private Date endDate;
+//  @JsonFormat(pattern = "yyyy-mm-dd")
+//  //  @Column(name = "create_at")
+//  private Date createdAt;
+//  @JsonFormat(pattern = "yyyy-mm-dd")
+//  //  @Column(name = "update_at")
+//  private Date updatedAt;
 
-  //  @Column(name = "owner")
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-  @JoinColumn(name = "projectId", nullable = false)
+  @JoinColumn(name = "project_id", nullable = false)
   @JsonIgnore
   private User owner;
 
-  //      name = "user_project",
-//      joinColumns = {@JoinColumn(name="project_id")},
-//      inverseJoinColumns = @JoinColumn(name = "user_id")
   @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
   @JoinTable(
-          name = "userProject",
-          joinColumns = {@JoinColumn(name="projectId")},
-          inverseJoinColumns = @JoinColumn(name = "userId")
+          name = "user_project",
+      joinColumns = {@JoinColumn(name="project_id")},
+      inverseJoinColumns = @JoinColumn(name = "user_id")
   )
 //  @Column(name = "partners")
-  @JsonIgnore // 这里要不要ignore啊？？？
+  @JsonIgnore
   private List<User> partners;
 
 //  @Column(name = "tasks_contained")
@@ -97,14 +93,6 @@ public class Project {
   public Project() {
   }
 
-  protected void onCreated(){
-    this.createdAt = new Date();
-  }
-
-  protected void onUpdate(){
-    this.updatedAt = new Date();
-  }
-
   public Long getId() {
     return id;
   }
@@ -121,8 +109,6 @@ public class Project {
     this.projectName = projectName;
   }
 
-
-
   public String getProjectDescription() {
     return projectDescription;
   }
@@ -131,37 +117,6 @@ public class Project {
     this.projectDescription = projectDescription;
   }
 
-  public Date getStartDate() {
-    return startDate;
-  }
-
-  public void setStartDate(Date startDate) {
-    this.startDate = startDate;
-  }
-
-  public Date getEndDate() {
-    return endDate;
-  }
-
-  public void setEndDate(Date endDate) {
-    this.endDate = endDate;
-  }
-
-  public Date getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public Date getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = updatedAt;
-  }
   public String getOwnerName() {
     return ownerName;
   }
@@ -177,4 +132,45 @@ public class Project {
   public void setTasksContained(List<ProjectTask> tasksContained) {
     this.tasksContained = tasksContained;
   }
+
+//  protected void onCreated(){
+//    this.createdAt = new Date();
+//  }
+//
+//  protected void onUpdate(){
+//    this.updatedAt = new Date();
+//  }
+//
+//
+//  public Date getStartDate() {
+//    return startDate;
+//  }
+//
+//  public void setStartDate(Date startDate) {
+//    this.startDate = startDate;
+//  }
+//
+//  public Date getEndDate() {
+//    return endDate;
+//  }
+//
+//  public void setEndDate(Date endDate) {
+//    this.endDate = endDate;
+//  }
+//
+//  public Date getCreatedAt() {
+//    return createdAt;
+//  }
+//
+//  public void setCreatedAt(Date createdAt) {
+//    this.createdAt = createdAt;
+//  }
+//
+//  public Date getUpdatedAt() {
+//    return updatedAt;
+//  }
+//
+//  public void setUpdatedAt(Date updatedAt) {
+//    this.updatedAt = updatedAt;
+//  }
 }

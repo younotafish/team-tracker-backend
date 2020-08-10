@@ -37,25 +37,27 @@ public class ProjectTask {
   private String ownerName;
 
   @ManyToOne
-//  @JoinColumn(name = "project_id",nullable = false)
-  @JoinColumn(name = "projectId",nullable = false)
+  @JoinColumn(name = "project_id",nullable = false)
+//  @JoinColumn(name = "projectId",nullable = false)
 //  @Column(name = "project")
   @JsonIgnore
   private Project project;
 
-  @JsonFormat(pattern = "yyyy-mm--dd")
-//  @Column(name = "start_date")
-  private Date startDate;
-  @JsonFormat(pattern = "yyyy-mm--dd")
-//  @Column(name = "end_date")
-  private Date endDate;
-  @JsonFormat(pattern = "yyyy-mm--dd")
-//  @Column(name = "create_at")
-  private Date createdAt;
-  @JsonFormat(pattern = "yyyy-mm--dd")
-//  @Column(name = "update_at")
-  private Date updateAt;
   //  private String priority;
+
+//  @JsonFormat(pattern = "yyyy-mm--dd")
+////  @Column(name = "start_date")
+//  private Date startDate;
+//  @JsonFormat(pattern = "yyyy-mm--dd")
+////  @Column(name = "end_date")
+//  private Date endDate;
+//  @JsonFormat(pattern = "yyyy-mm--dd")
+////  @Column(name = "create_at")
+//  private Date createdAt;
+//  @JsonFormat(pattern = "yyyy-mm--dd")
+////  @Column(name = "update_at")
+//  private Date updateAt;
+
 
 
 
@@ -94,16 +96,6 @@ public class ProjectTask {
   public ProjectTask() {
   }
 
-  @PrePersist
-  protected void onCreated(){
-    this.createdAt = new Date();
-  }
-
-  @PreUpdate
-  protected void onUpdated(){
-    this.createdAt = new Date();
-  }
-
   public Long getId() {
     return id;
   }
@@ -111,8 +103,6 @@ public class ProjectTask {
   public void setId(Long id) {
     this.id = id;
   }
-
-
 
   public String getStatus() {
     return status;
@@ -129,36 +119,45 @@ public class ProjectTask {
   public void setTaskDescription(String taskDescription) {
     this.taskDescription = taskDescription;
   }
-
-  public Date getStartDate() {
-    return startDate;
-  }
-
-  public void setStartDate(Date startDate) {
-    this.startDate = startDate;
-  }
-
-  public Date getEndDate() {
-    return endDate;
-  }
-
-  public void setEndDate(Date endDate) {
-    this.endDate = endDate;
-  }
-
-  public Date getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public Date getUpdateAt() {
-    return updateAt;
-  }
-
-  public void setUpdateAt(Date updateAt) {
-    this.updateAt = updateAt;
-  }
+//  @PrePersist
+//  protected void onCreated(){
+//    this.createdAt = new Date();
+//  }
+//
+//  @PreUpdate
+//  protected void onUpdated(){
+//    this.createdAt = new Date();
+//  }
+//
+//  public Date getStartDate() {
+//    return startDate;
+//  }
+//
+//  public void setStartDate(Date startDate) {
+//    this.startDate = startDate;
+//  }
+//
+//  public Date getEndDate() {
+//    return endDate;
+//  }
+//
+//  public void setEndDate(Date endDate) {
+//    this.endDate = endDate;
+//  }
+//
+//  public Date getCreatedAt() {
+//    return createdAt;
+//  }
+//
+//  public void setCreatedAt(Date createdAt) {
+//    this.createdAt = createdAt;
+//  }
+//
+//  public Date getUpdateAt() {
+//    return updateAt;
+//  }
+//
+//  public void setUpdateAt(Date updateAt) {
+//    this.updateAt = updateAt;
+//  }
 }
