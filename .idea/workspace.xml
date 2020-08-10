@@ -15,21 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c42e3389-daa5-4544-8232-cdbd10269175" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/controller/ProjectController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/controller/ProjectController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/Project.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/ProjectTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/ProjectTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/repository/ProjectRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/repository/ProjectRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/service/ProjectService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/service/ProjectService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/controller/ProjectController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/controller/ProjectController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/domain/Project.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/domain/Project.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/domain/ProjectTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/domain/ProjectTask.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/domain/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/domain/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/repository/ProjectRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/repository/ProjectRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/service/ProjectService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/service/ProjectService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teamtracker/backend/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/service/TaskService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/service/TaskService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -273,7 +259,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/teamtracker/backend/service/TaskService.java</url>
-          <line>57</line>
+          <line>66</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>

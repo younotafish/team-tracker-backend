@@ -25,6 +25,7 @@ public class TaskService {
   ProjectTaskRepository projectTaskRepository;
 
   public ProjectTask createOrUpdateTaskByIncomingTask(ProjectTask projectTask){
+      // 可以加一个对owner是否为null的验证以及抛出异常，也可以不加
       Project project = projectRepository.findByOwnerNameAndProjectName(projectTask.getOwnerName(),projectTask.getProjectName());
       if(project == null){
         throw new ProjectNotFoundException("project " + projectTask.getProjectName() + " not found.");
@@ -33,22 +34,30 @@ public class TaskService {
           findByProjectNameAndOwnerNameAndTaskName(projectTask.getProjectName(),projectTask.getOwnerName(),projectTask.getTaskName());
       if(oldProjectTask == null){
 //      新建一个任务
-//        projectTask.setUuid(UUID.randomUUID());
         projectTask.setProject(project);
-        projectTaskRepository.save(projectTask);
+        // 更新project里面的tasksContained
         List<ProjectTask> oldTasks = project.getTasksContained();
         oldTasks.add(projectTask);
-        projectRepository.save(project);
-        return projectTask;
       }
       else{
 //      更新一个任务
         oldProjectTask.setTaskName(projectTask.getTaskName());
         oldProjectTask.setTaskDescription(projectTask.getTaskDescription());
         oldProjectTask.setStatus(projectTask.getStatus());
-        projectTaskRepository.save(oldProjectTask);
-        return oldProjectTask;
+        List<ProjectTask> oldTasks = project.getTasksContained();
+        // 更新project里面的tasksContained
+        for (ProjectTask task: oldTasks) {
+            if (task.getOwnerName() == oldProjectTask.getOwnerName()
+                    && task.getProjectName() == oldProjectTask.getProjectName()) {
+                oldTasks.remove(task);
+                oldTasks.add(oldProjectTask);
+                break;
+            }
+        }
       }
+      projectRepository.save(project);
+      ProjectTask savedProject = projectTaskRepository.save(projectTask);
+      return savedProject;
   }
 
   public Iterable<ProjectTask> getTasksByProject(Project project){
