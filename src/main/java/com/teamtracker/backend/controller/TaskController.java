@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/task")
 public class TaskController {
@@ -40,9 +43,10 @@ public class TaskController {
     if (errMap != null) {
       return errMap;
     }
-    Iterable<ProjectTask> updatedTasks = taskService.createOrUpdateTaskByIncomingTask(projectTask);
-    return new ResponseEntity<Iterable<ProjectTask>>(updatedTasks, HttpStatus.OK);
+    List<String> taskNames = taskService.createOrUpdateTaskByIncomingTask(projectTask);
+    return new ResponseEntity<List<String>>(taskNames, HttpStatus.OK);
   }
+
   @PostMapping("/tasksByProject")
   public ResponseEntity<?> getTasksByProject(@Valid @RequestBody Project project, BindingResult result){
      ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
@@ -54,33 +58,33 @@ public class TaskController {
   }
 
   @PostMapping("/tasksTodoByProject")
-  public Iterable<ProjectTask> getTasksTodoByProject(@Valid @RequestBody Project project, BindingResult result){
-    // ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
-    // if (errMap != null) {
-    //   return errMap;
-    // }
-    Iterable<ProjectTask> tasksByProject = taskService.getTasksTodoByProject(project);
-    return tasksByProject;
+  public ResponseEntity<?> getTasksTodoByProject(@Valid @RequestBody Project project, BindingResult result){
+     ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+     if (errMap != null) {
+       return errMap;
+     }
+    List<String> taskNames = taskService.getTasksTodoByProject(project);
+    return new ResponseEntity<List<String>>(taskNames, HttpStatus.OK);
   }
 
   @PostMapping("/tasksDoingByProject")
-  public Iterable<ProjectTask> getTasksDoingByProject(@Valid @RequestBody Project project, BindingResult result){
-    // ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
-    // if (errMap != null) {
-    //   return errMap;
-    // }
-    Iterable<ProjectTask> tasksByProject = taskService.getTasksDoingByProject(project);
-    return tasksByProject;
+  public ResponseEntity<?> getTasksDoingByProject(@Valid @RequestBody Project project, BindingResult result){
+    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+    if (errMap != null) {
+      return errMap;
+    }
+    List<String> taskNames = taskService.getTasksDoingByProject(project);
+    return new ResponseEntity<List<String>>(taskNames, HttpStatus.OK);
   }
 
   @PostMapping("/tasksDoneByProject")
-  public Iterable<ProjectTask> getTasksDoneByProject(@Valid @RequestBody Project project, BindingResult result){
-    // ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
-    // if (errMap != null) {
-    //   return errMap;
-    // }
-    Iterable<ProjectTask> tasksByProject = taskService.getTasksDoneByProject(project);
-    return tasksByProject;
+  public ResponseEntity<?> getTasksDoneByProject(@Valid @RequestBody Project project, BindingResult result){
+    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+    if (errMap != null) {
+      return errMap;
+    }
+    List<String> taskNames = taskService.getTasksDoneByProject(project);
+    return new ResponseEntity<List<String>>(taskNames, HttpStatus.OK);
   }
 
   @PostMapping("/updateTask")
@@ -90,8 +94,8 @@ public class TaskController {
     if (errMap != null) {
       return errMap;
     }
-    Iterable<ProjectTask> updatedTasks = taskService.createOrUpdateTaskByIncomingTask(projectTask);
-    return new ResponseEntity<Iterable<ProjectTask>>(updatedTasks, HttpStatus.OK);
+    List<String> taskNames = taskService.createOrUpdateTaskByIncomingTask(projectTask);
+    return new ResponseEntity<List<String>>(taskNames, HttpStatus.OK);
   }
 
 }
