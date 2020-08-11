@@ -5,6 +5,8 @@ import com.teamtracker.backend.domain.User;
 import com.teamtracker.backend.service.MapValidationErrorService;
 import com.teamtracker.backend.service.ProjectService;
 import com.teamtracker.backend.service.UserService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +16,10 @@ import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -134,6 +132,18 @@ public class ProjectController {
     return new ResponseEntity<Iterable<User>>(collaborators, HttpStatus.OK);
   }
 
+  @GetMapping("/search")
+  public ResponseEntity<?> getAllProjectNamesBySearch(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
+    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+    if (errMap != null) {
+      return errMap;
+    }
+    String ownerName = jsonMap.get(("ownerName"));
+    String searchedString = jsonMap.get("searchedString");
+    List<String> projectNames = projectService.searchByString(ownerName, searchedString);
+    return new ResponseEntity<List<String>>(projectNames, HttpStatus.OK);
+  }
+
   // 这个方法是通过projectName和ownerName得到这个project的partners，先注释掉不用吧
 //  @GetMapping("/partnersByProjectNameAndOwnerName")
 //  public ResponseEntity<?> getAllCollaborators(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
@@ -146,4 +156,5 @@ public class ProjectController {
 //    Iterable<User> collaborators = userService.getPartnersByProjectNameAndOwnerName(projectName, ownerName);
 //    return new ResponseEntity<Iterable<User>>(collaborators, HttpStatus.OK);
 //  }
+
 }

@@ -1,6 +1,7 @@
 package com.teamtracker.backend.service;
 
 import com.teamtracker.backend.domain.Project;
+import com.teamtracker.backend.domain.ProjectTask;
 import com.teamtracker.backend.domain.User;
 import com.teamtracker.backend.exceptions.ProjectNameException;
 import com.teamtracker.backend.exceptions.ProjectNotFoundException;
@@ -8,9 +9,8 @@ import com.teamtracker.backend.exceptions.UserNameException;
 import com.teamtracker.backend.repository.ProjectRepository;
 import com.teamtracker.backend.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,7 +111,25 @@ public class ProjectService {
   public Iterable<Project> findAllByPartner(User partner) {
     List<Project> projectParticipated = partner.getProjectParticipated();
     return projectParticipated;
+  }
 
+  public List<String> searchByString(String ownerName, String searchedString) {
+    Iterable<Project> projects = projectRepository.findByOwnerName(ownerName);
+    List<String> projectNames = new ArrayList<>();
+    for (Project project: projects) {
+      Set<String> set = new HashSet<>();
+      set.add(project.getProjectName());
+      set.add(project.getProjectDescription());
+      List<ProjectTask> tasks = project.getTasksContained();
+      for (ProjectTask task: tasks) {
+        set.add(task.getTaskName());
+        set.add(task.getTaskDescription());
+      }
+      if (set.contains(searchedString)) {
+        projectNames.add(project.getProjectName());
+      }
+    }
+    return projectNames;
   }
 
 
