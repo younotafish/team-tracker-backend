@@ -7,6 +7,7 @@ import com.teamtracker.backend.exceptions.ProjectNameException;
 import com.teamtracker.backend.exceptions.ProjectNotFoundException;
 import com.teamtracker.backend.exceptions.UserNameException;
 import com.teamtracker.backend.repository.ProjectRepository;
+import com.teamtracker.backend.repository.ProjectTaskRepository;
 import com.teamtracker.backend.repository.UserRepository;
 
 import java.util.*;
@@ -25,29 +26,37 @@ public class ProjectService {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private ProjectTaskRepository projectTaskRepository;
+
   public List<String> saveProject(Project project) {
-      // 如果数据库里已经有这个project（根据ownerName和projectName唯一确定），抛出异常
       Project existingProject = projectRepository
           .findByOwnerNameAndProjectName(project.getOwnerName(), project.getProjectName());
+      // 如果数据库里已经有这个project（根据ownerName和projectName唯一确定），
+      // 修改projectDescription
       if (existingProject != null) {
-        throw new ProjectNameException(
-            "The project " + project.getProjectName() + " in this account has already existed.");
+//        throw new ProjectNameException(
+//            "The project " + project.getProjectName() + " in this account has already existed.");
+          project.setProjectDescription(existingProject.getProjectDescription());
       }
-    // 先确定这个project的owner
-    User owner = userRepository.findByUserName(project.getOwnerName());
-    // owner之前没有在数据库中存过
-    if (owner == null) {
-      owner = new User(project.getOwnerName());
-    }
-    project.setOwner(owner);
-    User savedOwner = userRepository.save(owner); // 要不要加
-    Project savedProject = projectRepository.save(project);
-    Iterable<Project> allProjects = projectRepository.findByOwnerName(project.getOwnerName());
-    List<String> projectNames = new ArrayList<>();
-    for (Project foundProject: allProjects) {
-      projectNames.add(foundProject.getProjectName());
-    }
-    return projectNames;
+      // 否则，数据库里以前没存过这个project，那么就创建这个project
+      else {
+        // 先确定这个project的owner
+        User owner = userRepository.findByUserName(project.getOwnerName());
+        // 检查数据库中有没有存过这个owner
+        if (owner == null) {
+          owner = new User(project.getOwnerName());
+        }
+        project.setOwner(owner);
+        User savedOwner = userRepository.save(owner); // 要不要加
+      }
+      Project savedProject = projectRepository.save(project);
+      Iterable<Project> allProjects = projectRepository.findByOwnerName(project.getOwnerName());
+      List<String> projectNames = new ArrayList<>();
+      for (Project foundProject: allProjects) {
+        projectNames.add(foundProject.getProjectName());
+      }
+      return projectNames;
   }
 
   public Project findByOwnerNameAndProjectName(String ownerName, String projectName) {
@@ -112,22 +121,44 @@ public class ProjectService {
   }
 
   public List<String> searchByString(String ownerName, String searchedString) {
-    Iterable<Project> projects = projectRepository.findByOwnerName(ownerName);
     List<String> projectNames = new ArrayList<>();
-    for (Project project: projects) {
-      Set<String> set = new HashSet<>();
+    Set<String> set = new HashSet<>();
+    Iterable<Project> projectsByProjectNameContains = projectRepository.findByOwnerNameAndProjectNameContains(ownerName, searchedString);
+    for (Project project: projectsByProjectNameContains) {
       set.add(project.getProjectName());
-      set.add(project.getProjectDescription());
-      List<ProjectTask> tasks = project.getTasksContained();
-      for (ProjectTask task: tasks) {
-        set.add(task.getTaskName());
-        set.add(task.getTaskDescription());
-      }
-      if (set.contains(searchedString)) {
-        projectNames.add(project.getProjectName());
-      }
+    }
+    Iterable<Project> projectsByProjectDescriptionContains = projectRepository.findByOwnerNameAndProjectDescriptionContains(ownerName, searchedString);
+    for (Project project: projectsByProjectDescriptionContains) {
+      set.add(project.getProjectName());
+    }
+    Iterable<ProjectTask> projectsByTaskNameContains = projectTaskRepository.findByOwnerNameAndTaskNameContains(ownerName, searchedString);
+    for (ProjectTask task: projectsByTaskNameContains) {
+      set.add(task.getProjectName());
+    }
+    Iterable<ProjectTask> projectsByTaskDescriptionContains = projectTaskRepository.findByOwnerNameAndTaskDescriptionContains(ownerName, searchedString);
+    for (ProjectTask task: projectsByTaskDescriptionContains) {
+      set.add(task.getProjectName());
+    }
+    for (String string: set) {
+      projectNames.add(string);
     }
     return projectNames;
+//    Iterable<Project> projects = projectRepository.findByOwnerName(ownerName);
+//    List<String> projectNames = new ArrayList<>();
+//    for (Project project: projects) {
+//      Set<String> set = new HashSet<>();
+//      set.add(project.getProjectName());
+//      set.add(project.getProjectDescription());
+//      List<ProjectTask> tasks = project.getTasksContained();
+//      for (ProjectTask task: tasks) {
+//        set.add(task.getTaskName());
+//        set.add(task.getTaskDescription());
+//      }
+//      if (set.contains(searchedString)) {
+//        projectNames.add(project.getProjectName());
+//      }
+//    }
+
   }
 
 

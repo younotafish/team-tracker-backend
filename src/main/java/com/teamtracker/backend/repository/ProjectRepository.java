@@ -9,5 +9,8 @@ public interface ProjectRepository extends CrudRepository<Project,Long> {
   Iterable<Project> findByOwnerName(String ownerName);
   Project findByOwnerNameAndProjectName(String ownerName, String projectName);
 //  Project deleteByProjectNameAndOwnerName(String projectName,String ownerName);
-//  Iterable<Project> findByOwnerNameAndProjectNameContains(String ownerName,String partialProjectName);
+  Iterable<Project> findByOwnerNameAndProjectNameContains(String ownerName,String searchedString);
+  Iterable<Project> findByOwnerNameAndProjectDescriptionContains(String ownerName, String searchedString);
+
+
 }
