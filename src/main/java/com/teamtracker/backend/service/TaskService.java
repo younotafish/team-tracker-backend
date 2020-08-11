@@ -71,10 +71,21 @@ public class TaskService {
             oldProjectTask.setStatus(projectTask.getStatus());
             projectTaskRepository.save(oldProjectTask);
         }
-        Iterable<ProjectTask> updatedtasksContained = project.getTasksContained();
-        List<String> taskNames = new ArrayList<>();
-        for (ProjectTask updatedTaskContained: updatedtasksContained) {
-            taskNames.add(updatedTaskContained.getTaskName());
+//        Iterable<ProjectTask> updatedtasksContained = project.getTasksContained();
+//        List<String> taskNames = new ArrayList<>();
+//        for (ProjectTask updatedTaskContained: updatedtasksContained) {
+//            taskNames.add(updatedTaskContained.getTaskName());
+//        }
+        String status = projectTask.getStatus();
+        List<String> taskNames;
+        if (status.equals(todo)) {
+            taskNames = getTasksTodoByProject(project);
+        } else if (status.equals(doing)) {
+            taskNames = getTasksDoingByProject(project);
+        } else if (status.equals(done)) {
+            taskNames = getTasksDoneByProject(project);
+        } else {
+            taskNames = new ArrayList<>();
         }
         return taskNames;
     }
