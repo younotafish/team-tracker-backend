@@ -81,14 +81,12 @@ public class ProjectService {
       User newUser = new User(ownerName);
       owner = userRepository.save(newUser);
       // 返回个空的呗
-      return new Iterable<Project>() {
-        @Override
-        public Iterator<Project> iterator() {
-          return null;
-        }
-      };
+      List<Project> list = new ArrayList<>();
+      Iterable<Project> iterable = list;
+      return iterable;
     } else {
-      return projectRepository.findByOwnerName(ownerName);
+      Iterable<Project> projectsByOwnerName = projectRepository.findByOwnerName(ownerName);
+      return projectsByOwnerName;
     }
   }
 
