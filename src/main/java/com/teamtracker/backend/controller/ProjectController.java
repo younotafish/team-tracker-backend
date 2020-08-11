@@ -42,8 +42,8 @@ public class ProjectController {
     if (errMap != null) {
       return errMap;
     }
-    Project project1 = projectService.saveProject(project);
-    return new ResponseEntity<Project>(project1, HttpStatus.OK);
+    List<String> projectNames = projectService.saveProject(project);
+    return new ResponseEntity<List<String>>(projectNames, HttpStatus.OK);
   }
 
 //  @GetMapping("/getByProjectNameAndOwnerName")

@@ -25,7 +25,7 @@ public class ProjectService {
   @Autowired
   private UserRepository userRepository;
 
-  public Project saveProject(Project project) {
+  public List<String> saveProject(Project project) {
       // 如果数据库里已经有这个project（根据ownerName和projectName唯一确定），抛出异常
       Project existingProject = projectRepository
           .findByOwnerNameAndProjectName(project.getOwnerName(), project.getProjectName());
@@ -38,22 +38,16 @@ public class ProjectService {
     // owner之前没有在数据库中存过
     if (owner == null) {
       owner = new User(project.getOwnerName());
-//      List<Project> projectList = new ArrayList<>();
-//      projectList.add(project);
-//      owner.setProjectOwned(projectList);
-//      project.setOwner(owner);
-    // owner在数据库中有过，也就是这个owner有过别的项目
     }
-//    else {
-//      List<Project> projectList = owner.getProjectOwned();
-//      projectList.add(project);
-//      owner.setProjectOwned(projectList);
-//      project.setOwner(owner);
-//    }
     project.setOwner(owner);
     User savedOwner = userRepository.save(owner); // 要不要加
     Project savedProject = projectRepository.save(project);
-    return savedProject;
+    Iterable<Project> allProjects = projectRepository.findByOwnerName(project.getOwnerName());
+    List<String> projectNames = new ArrayList<>();
+    for (Project foundProject: allProjects) {
+      projectNames.add(foundProject.getProjectName());
+    }
+    return projectNames;
   }
 
   public Project findByOwnerNameAndProjectName(String ownerName, String projectName) {
