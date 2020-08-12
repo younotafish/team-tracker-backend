@@ -139,6 +139,44 @@ public class TaskService {
         return taskNames;
     }
 
+    public List<String> updateTaskByOriginalTaskName(String projectName,
+                                                     String ownerName,
+                                                     String taskName,
+                                                     String taskDescription,
+                                                     String status,
+                                                     String originalTaskName){
+        // 可以加一个对owner是否为null的验证以及抛出异常，也可以不加
+        Project project = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
+        if(project == null){
+            throw new ProjectNotFoundException("project " + projectName + " not found.");
+        }
+        ProjectTask oldProjectTask = projectTaskRepository.findByProjectNameAndOwnerNameAndTaskName(projectName, ownerName, originalTaskName);
+        if(oldProjectTask == null){
+            // 抛出异常，没这个任务
+            // 这里应该写一个taskNotFoundException的
+            throw new ProjectNotFoundException("task " + originalTaskName + " not found.");
+        }
+        else{
+            // 更新一个任务
+            oldProjectTask.setTaskName(taskName);
+            oldProjectTask.setTaskDescription(taskDescription);
+            oldProjectTask.setStatus(status);
+            projectTaskRepository.save(oldProjectTask);
+        }
+        List<String> taskNames;
+        if (status.equals(todo)) {
+            taskNames = getTasksTodoByProject(project);
+        } else if (status.equals(doing)) {
+            taskNames = getTasksDoingByProject(project);
+        } else if (status.equals(done)) {
+            taskNames = getTasksDoneByProject(project);
+        } else {
+            // 其实应该写一个statusNotFoundException的，再优化吧
+            taskNames = new ArrayList<>();
+        }
+        return taskNames;
+    }
+
     public Iterable<ProjectTask> searchByString(String ownerName, String projectName, String searchedString) {
         Set<ProjectTask> set = new HashSet<>();
         Iterable<ProjectTask> tasksByTaskNameContains = projectTaskRepository.findByOwnerNameAndProjectNameAndTaskNameContains(ownerName, projectName, searchedString);

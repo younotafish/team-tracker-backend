@@ -89,14 +89,19 @@ public class TaskController {
   }
 
   @PostMapping("/updateTask")
-  public ResponseEntity<?> updateTask(@Valid @RequestBody ProjectTask projectTask,
-                                         BindingResult result) {
+  public ResponseEntity<?> updateTask(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
     ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
     if (errMap != null) {
       return errMap;
     }
-    List<String> taskNames = taskService.createOrUpdateTaskByIncomingTask(projectTask);
-    return new ResponseEntity<List<String>>(taskNames, HttpStatus.OK);
+    String ownerName = jsonMap.get(("ownerName"));
+    String projectName = jsonMap.get("projectName");
+    String taskName = jsonMap.get("taskName");
+    String taskDescription = jsonMap.get("taskDescription");
+    String status = jsonMap.get("status");
+    String originalTaskName = jsonMap.get("originalTaskName");
+    List<String> updatedTaskNames = taskService.updateTaskByOriginalTaskName(projectName, ownerName, taskName, taskDescription, status, originalTaskName);
+    return new ResponseEntity<List<String>>(updatedTaskNames, HttpStatus.OK);
   }
 
   @GetMapping("/search")
