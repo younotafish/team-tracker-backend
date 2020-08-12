@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/task")
@@ -96,6 +97,19 @@ public class TaskController {
     }
     List<String> taskNames = taskService.createOrUpdateTaskByIncomingTask(projectTask);
     return new ResponseEntity<List<String>>(taskNames, HttpStatus.OK);
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<?> getAllProjectTaskNamesBySearch(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
+    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+    if (errMap != null) {
+      return errMap;
+    }
+    String ownerName = jsonMap.get(("ownerName"));
+    String projectName = jsonMap.get(("projectName"));
+    String searchedString = jsonMap.get("searchedString");
+    Iterable<ProjectTask> foundTasks = taskService.searchByString(ownerName, projectName, searchedString);
+    return new ResponseEntity<Iterable<ProjectTask>>(foundTasks, HttpStatus.OK);
   }
 
 }

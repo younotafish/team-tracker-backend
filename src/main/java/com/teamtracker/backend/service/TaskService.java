@@ -6,10 +6,8 @@ import com.teamtracker.backend.exceptions.ProjectNotFoundException;
 import com.teamtracker.backend.repository.ProjectRepository;
 import com.teamtracker.backend.repository.ProjectTaskRepository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -139,5 +137,19 @@ public class TaskService {
             taskNames.add(taskInProject.getTaskName());
         }
         return taskNames;
+    }
+
+    public Iterable<ProjectTask> searchByString(String ownerName, String projectName, String searchedString) {
+        Set<ProjectTask> set = new HashSet<>();
+        Iterable<ProjectTask> tasksByTaskNameContains = projectTaskRepository.findByOwnerNameAndProjectNameAndTaskNameContains(ownerName, projectName, searchedString);
+        for (ProjectTask task : tasksByTaskNameContains) {
+            set.add(task);
+        }
+        Iterable<ProjectTask> tasksByTaskDescriptionContains = projectTaskRepository.findByOwnerNameAndProjectNameAndTaskDescriptionContains(ownerName, projectName, searchedString);
+        for (ProjectTask task : tasksByTaskDescriptionContains) {
+            set.add(task);
+        }
+        Iterable<ProjectTask> foundTasks = set;
+        return foundTasks;
     }
 }

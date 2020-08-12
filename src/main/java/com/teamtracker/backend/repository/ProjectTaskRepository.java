@@ -11,4 +11,7 @@ public interface ProjectTaskRepository extends CrudRepository<ProjectTask,Long> 
 
   Iterable<ProjectTask> findByOwnerNameAndTaskNameContains(String ownerName, String searchedString);
   Iterable<ProjectTask> findByOwnerNameAndTaskDescriptionContains(String ownerName, String searchedString);
+
+  Iterable<ProjectTask> findByOwnerNameAndProjectNameAndTaskNameContains(String ownerName, String projectName, String searchedString);
+  Iterable<ProjectTask> findByOwnerNameAndProjectNameAndTaskDescriptionContains(String ownerName, String projectName, String searchedString);
 }

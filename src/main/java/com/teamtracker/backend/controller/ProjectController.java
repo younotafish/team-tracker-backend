@@ -140,8 +140,8 @@ public class ProjectController {
     }
     String ownerName = jsonMap.get(("ownerName"));
     String searchedString = jsonMap.get("searchedString");
-    Iterable<Project> projectNames = projectService.searchByString(ownerName, searchedString);
-    return new ResponseEntity<Iterable<Project>>(projectNames, HttpStatus.OK);
+    Iterable<Project> foundProjects = projectService.searchByString(ownerName, searchedString);
+    return new ResponseEntity<Iterable<Project>>(foundProjects, HttpStatus.OK);
   }
 
   // 这个方法是通过projectName和ownerName得到这个project的partners，先注释掉不用吧
