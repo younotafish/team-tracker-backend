@@ -120,29 +120,26 @@ public class ProjectService {
     return projectParticipated;
   }
 
-  public List<String> searchByString(String ownerName, String searchedString) {
-    List<String> projectNames = new ArrayList<>();
-    Set<String> set = new HashSet<>();
+  public Iterable<Project> searchByString(String ownerName, String searchedString) {
+    Set<Project> set = new HashSet<>();
     Iterable<Project> projectsByProjectNameContains = projectRepository.findByOwnerNameAndProjectNameContains(ownerName, searchedString);
     for (Project project: projectsByProjectNameContains) {
-      set.add(project.getProjectName());
+      set.add(project);
     }
     Iterable<Project> projectsByProjectDescriptionContains = projectRepository.findByOwnerNameAndProjectDescriptionContains(ownerName, searchedString);
     for (Project project: projectsByProjectDescriptionContains) {
-      set.add(project.getProjectName());
+      set.add(project);
     }
     Iterable<ProjectTask> projectsByTaskNameContains = projectTaskRepository.findByOwnerNameAndTaskNameContains(ownerName, searchedString);
     for (ProjectTask task: projectsByTaskNameContains) {
-      set.add(task.getProjectName());
+      set.add(task.getProject());
     }
     Iterable<ProjectTask> projectsByTaskDescriptionContains = projectTaskRepository.findByOwnerNameAndTaskDescriptionContains(ownerName, searchedString);
     for (ProjectTask task: projectsByTaskDescriptionContains) {
-      set.add(task.getProjectName());
+      set.add(task.getProject());
     }
-    for (String string: set) {
-      projectNames.add(string);
-    }
-    return projectNames;
+    Iterable<Project> foundProjects = set;
+    return foundProjects;
 //    Iterable<Project> projects = projectRepository.findByOwnerName(ownerName);
 //    List<String> projectNames = new ArrayList<>();
 //    for (Project project: projects) {
