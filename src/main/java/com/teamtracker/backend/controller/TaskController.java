@@ -104,7 +104,7 @@ public class TaskController {
     return new ResponseEntity<List<String>>(updatedTaskNames, HttpStatus.OK);
   }
 
-  @GetMapping("/search")
+  @PostMapping("/search")
   public ResponseEntity<?> getAllProjectTaskNamesBySearch(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
     ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
     if (errMap != null) {

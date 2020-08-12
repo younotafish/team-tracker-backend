@@ -133,7 +133,7 @@ public class ProjectController {
     return new ResponseEntity<Iterable<User>>(collaborators, HttpStatus.OK);
   }
 
-  @GetMapping("/search")
+  @PostMapping("/search")
   public ResponseEntity<?> getAllProjectNamesBySearch(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
     ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
     if (errMap != null) {
