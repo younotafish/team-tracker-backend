@@ -37,7 +37,8 @@ public class ProjectService {
       if (existingProject != null) {
 //        throw new ProjectNameException(
 //            "The project " + project.getProjectName() + " in this account has already existed.");
-          project.setProjectDescription(existingProject.getProjectDescription());
+          existingProject.setProjectDescription(project.getProjectDescription());
+          projectRepository.save(existingProject);
       }
       // 否则，数据库里以前没存过这个project，那么就创建这个project
       else {
@@ -49,8 +50,8 @@ public class ProjectService {
         }
         project.setOwner(owner);
         User savedOwner = userRepository.save(owner); // 要不要加
+        projectRepository.save(project);
       }
-      Project savedProject = projectRepository.save(project);
       Iterable<Project> allProjects = projectRepository.findByOwnerName(project.getOwnerName());
       return allProjects;
       //      List<String> projectNames = new ArrayList<>();
