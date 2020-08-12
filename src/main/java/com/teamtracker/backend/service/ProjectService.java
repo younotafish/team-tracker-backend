@@ -29,7 +29,7 @@ public class ProjectService {
   @Autowired
   private ProjectTaskRepository projectTaskRepository;
 
-  public List<String> saveProject(Project project) {
+  public Iterable<Project> saveProject(Project project) {
       Project existingProject = projectRepository
           .findByOwnerNameAndProjectName(project.getOwnerName(), project.getProjectName());
       // 如果数据库里已经有这个project（根据ownerName和projectName唯一确定），
@@ -52,11 +52,12 @@ public class ProjectService {
       }
       Project savedProject = projectRepository.save(project);
       Iterable<Project> allProjects = projectRepository.findByOwnerName(project.getOwnerName());
-      List<String> projectNames = new ArrayList<>();
-      for (Project foundProject: allProjects) {
-        projectNames.add(foundProject.getProjectName());
-      }
-      return projectNames;
+      return allProjects;
+      //      List<String> projectNames = new ArrayList<>();
+//      for (Project foundProject: allProjects) {
+//        projectNames.add(foundProject.getProjectName());
+//      }
+//      return projectNames;
   }
 
   public Project findByOwnerNameAndProjectName(String ownerName, String projectName) {
