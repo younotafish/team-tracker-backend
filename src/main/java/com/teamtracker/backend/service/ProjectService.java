@@ -132,14 +132,14 @@ public class ProjectService {
     for (Project project: projectsByProjectDescriptionContains) {
       set.add(project);
     }
-    Iterable<ProjectTask> projectsByTaskNameContains = projectTaskRepository.findByOwnerNameAndTaskNameContains(ownerName, searchedString);
-    for (ProjectTask task: projectsByTaskNameContains) {
-      set.add(task.getProject());
-    }
-    Iterable<ProjectTask> projectsByTaskDescriptionContains = projectTaskRepository.findByOwnerNameAndTaskDescriptionContains(ownerName, searchedString);
-    for (ProjectTask task: projectsByTaskDescriptionContains) {
-      set.add(task.getProject());
-    }
+//    Iterable<ProjectTask> projectsByTaskNameContains = projectTaskRepository.findByOwnerNameAndTaskNameContains(ownerName, searchedString);
+//    for (ProjectTask task: projectsByTaskNameContains) {
+//      set.add(task.getProject());
+//    }
+//    Iterable<ProjectTask> projectsByTaskDescriptionContains = projectTaskRepository.findByOwnerNameAndTaskDescriptionContains(ownerName, searchedString);
+//    for (ProjectTask task: projectsByTaskDescriptionContains) {
+//      set.add(task.getProject());
+//    }
     Iterable<Project> foundProjects = set;
     return foundProjects;
 //    Iterable<Project> projects = projectRepository.findByOwnerName(ownerName);
