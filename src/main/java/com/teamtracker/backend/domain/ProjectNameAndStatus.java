@@ -3,10 +3,12 @@ package com.teamtracker.backend.domain;
 public class ProjectNameAndStatus {
     private String projectName;
     private String status;
+    private String projectDescription;
 
-    public ProjectNameAndStatus(String projectName, String status) {
+    public ProjectNameAndStatus(String projectName, String status, String projectDescription) {
         this.projectName = projectName;
         this.status = status;
+        this.projectDescription = projectDescription;
     }
 
     public String getProjectName() {
@@ -23,5 +25,13 @@ public class ProjectNameAndStatus {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getProjectDescription() {
+        return projectDescription;
+    }
+
+    public void setProjectDescription(String projectDescription) {
+        this.projectDescription = projectDescription;
     }
 }

@@ -108,12 +108,12 @@ public class ProjectService {
   }
 
   public List<ProjectNameAndStatus> addPartner(String partnerName, String ownerName, String projectName) {
-
     User partner = userRepository.findByUserName(partnerName);
     // 如果partner没有，抛出异常
     if (partner == null) {
-      // 这个我不知道写的对不对？
-      throw new UserNameException("The partner" + partner.getUserName() + " doest not exist.");
+//       throw new UserNameException("The partner" + partner.getUserName() + " doest not exist.");
+      partner = new User(partnerName);
+      userRepository.save(partner);
     }
     Project foundProject = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
     if (foundProject == null) {
@@ -144,16 +144,16 @@ public class ProjectService {
     List<ProjectNameAndStatus> projectNameAndStatusList = new ArrayList<>();
     Iterable<Project> projectsOwned = partner.getProjectOwned();
     for (Project project: projectsOwned) {
-      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), owned);
+      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), owned, project.getProjectDescription());
       projectNameAndStatusList.add(projectNameAndStatus);
     }
     Iterable<Project> projectsParticipated = partner.getProjectParticipated();
     for (Project project: projectsParticipated) {
-      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), participated);
+      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), participated, project.getProjectDescription());
       projectNameAndStatusList.add(projectNameAndStatus);
     }
     if (repeatAdd == false) {
-      projectNameAndStatusList.add(new ProjectNameAndStatus(projectName, participated));
+      projectNameAndStatusList.add(new ProjectNameAndStatus(projectName, participated, foundProject.getProjectDescription()));
     }
     return projectNameAndStatusList;
   }
@@ -162,8 +162,9 @@ public class ProjectService {
     User partner = userRepository.findByUserName(partnerName);
     // 如果partner没有，抛出异常
     if (partner == null) {
-      // 这个我不知道写的对不对?
-      throw new UserNameException("The partner" + partner.getUserName() + " doest not exist.");
+//       throw new UserNameException("The partner" + partner.getUserName() + " doest not exist.");
+      partner = new User(partnerName);
+      userRepository.save(partner);
     }
     Project foundProject = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
     if (foundProject == null) {
@@ -177,13 +178,13 @@ public class ProjectService {
     List<ProjectNameAndStatus> projectNameAndStatusList = new ArrayList<>();
     Iterable<Project> projectsOwned = partner.getProjectOwned();
     for (Project project: projectsOwned) {
-      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), "owned");
+      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), owned, project.getProjectDescription());
       projectNameAndStatusList.add(projectNameAndStatus);
     }
     Iterable<Project> projectsParticipated = partner.getProjectParticipated();
     for (Project project: projectsParticipated) {
       if (project.getProjectName().equals(projectName)) {continue;}
-      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), "participated");
+      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), participated, project.getProjectDescription());
       projectNameAndStatusList.add(projectNameAndStatus);
     }
     return projectNameAndStatusList;
@@ -200,12 +201,12 @@ public class ProjectService {
     List<ProjectNameAndStatus> projectNameAndStatusList = new ArrayList<>();
     Iterable<Project> projectsOwned = user.getProjectOwned();
     for (Project project: projectsOwned) {
-      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), "owned");
+      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), owned, project.getProjectDescription());
       projectNameAndStatusList.add(projectNameAndStatus);
     }
     Iterable<Project> projectsParticipated = user.getProjectParticipated();
     for (Project project: projectsParticipated) {
-      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), "participated");
+      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), participated, project.getProjectDescription());
       projectNameAndStatusList.add(projectNameAndStatus);
     }
     return projectNameAndStatusList;
@@ -218,6 +219,9 @@ public class ProjectService {
 
   public Iterable<Project> searchByString(String ownerName, String searchedString) {
     Set<Project> set = new HashSet<>();
+    // 下面都是该用户拥有的projet进行搜索
+
+    // 对project的字段进行搜索
     Iterable<Project> projectsByProjectNameContains = projectRepository.findByOwnerNameAndProjectNameContains(ownerName, searchedString);
     for (Project project: projectsByProjectNameContains) {
       set.add(project);
@@ -226,14 +230,20 @@ public class ProjectService {
     for (Project project: projectsByProjectDescriptionContains) {
       set.add(project);
     }
-//    Iterable<ProjectTask> projectsByTaskNameContains = projectTaskRepository.findByOwnerNameAndTaskNameContains(ownerName, searchedString);
-//    for (ProjectTask task: projectsByTaskNameContains) {
-//      set.add(task.getProject());
-//    }
-//    Iterable<ProjectTask> projectsByTaskDescriptionContains = projectTaskRepository.findByOwnerNameAndTaskDescriptionContains(ownerName, searchedString);
-//    for (ProjectTask task: projectsByTaskDescriptionContains) {
-//      set.add(task.getProject());
-//    }
+    // 对project中task的字段进行搜索
+    //    Iterable<ProjectTask> projectsByTaskNameContains = projectTaskRepository.findByOwnerNameAndTaskNameContains(ownerName, searchedString);
+    //    for (ProjectTask task: projectsByTaskNameContains) {
+    //      set.add(task.getProject());
+    //    }
+    //    Iterable<ProjectTask> projectsByTaskDescriptionContains = projectTaskRepository.findByOwnerNameAndTaskDescriptionContains(ownerName, searchedString);
+    //    for (ProjectTask task: projectsByTaskDescriptionContains) {
+    //      set.add(task.getProject());
+    //    }
+
+    // 下面是对该用户参与的项目进行搜索
+    User user = userRepository.findByUserName(ownerName);
+
+
     Iterable<Project> foundProjects = set;
     return foundProjects;
 //    Iterable<Project> projects = projectRepository.findByOwnerName(ownerName);

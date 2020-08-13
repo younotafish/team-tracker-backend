@@ -14,7 +14,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c42e3389-daa5-4544-8232-cdbd10269175" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/controller/TaskController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/controller/TaskController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/ProjectNameAndStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/domain/ProjectNameAndStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/service/ProjectService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teamtracker/backend/service/ProjectService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,11 +154,11 @@
       <screen x="-1920" y="-97" width="1920" height="1080" />
     </state>
     <state x="-1920" y="-97" width="1920" height="1080" key="#Assign_Data_Sources/0.0.1440.900/-1920.-97.1920.1080@-1920.-97.1920.1080" timestamp="1595736836716" />
-    <state x="580" y="219" key="#com.intellij.ide.util.MemberChooser" timestamp="1597340408751">
+    <state x="580" y="219" key="#com.intellij.ide.util.MemberChooser" timestamp="1597360607307">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="-1147" y="166" key="#com.intellij.ide.util.MemberChooser/0.0.1440.900/-1920.-97.1920.1080@-1920.-97.1920.1080" timestamp="1595791137121" />
-    <state x="580" y="219" key="#com.intellij.ide.util.MemberChooser/0.0.1440.900@0.0.1440.900" timestamp="1597340408751" />
+    <state x="580" y="219" key="#com.intellij.ide.util.MemberChooser/0.0.1440.900@0.0.1440.900" timestamp="1597360607307" />
     <state x="773" y="263" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1597038795683" />
     <state width="1398" height="601" key="GridCell.Tab.0.bottom" timestamp="1597350546239">
       <screen x="0" y="0" width="1440" height="900" />
