@@ -1,6 +1,5 @@
 package com.teamtracker.backend.controller;
 
-import com.sun.deploy.panel.ITreeNode;
 import com.teamtracker.backend.domain.Project;
 import com.teamtracker.backend.domain.ProjectTask;
 import com.teamtracker.backend.service.MapValidationErrorService;
