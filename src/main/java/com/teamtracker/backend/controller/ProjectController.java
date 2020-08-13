@@ -1,6 +1,7 @@
 package com.teamtracker.backend.controller;
 
 import com.teamtracker.backend.domain.Project;
+import com.teamtracker.backend.domain.ProjectNameAndStatus;
 import com.teamtracker.backend.domain.User;
 import com.teamtracker.backend.service.MapValidationErrorService;
 import com.teamtracker.backend.service.ProjectService;
@@ -108,9 +109,9 @@ public class ProjectController {
     String ownerName = jsonMap.get(("ownerName"));
     String projectName = jsonMap.get("projectName");
 
-    Project updatedProject = projectService.addPartner(partnerName, ownerName, projectName);
+    Iterable<ProjectNameAndStatus> projectNameAndStatuses = projectService.addPartner(partnerName, ownerName, projectName);
 
-    return new ResponseEntity<Project>(updatedProject, HttpStatus.OK);
+    return new ResponseEntity<Iterable<ProjectNameAndStatus>>(projectNameAndStatuses, HttpStatus.OK);
   }
 
   @GetMapping("/par/{parName}")
@@ -144,6 +145,7 @@ public class ProjectController {
     Iterable<Project> foundProjects = projectService.searchByString(ownerName, searchedString);
     return new ResponseEntity<Iterable<Project>>(foundProjects, HttpStatus.OK);
   }
+
 
   // 这个方法是通过projectName和ownerName得到这个project的partners，先注释掉不用吧
 //  @GetMapping("/partnersByProjectNameAndOwnerName")

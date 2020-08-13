@@ -1,6 +1,7 @@
 package com.teamtracker.backend.service;
 
 import com.teamtracker.backend.domain.Project;
+import com.teamtracker.backend.domain.ProjectNameAndStatus;
 import com.teamtracker.backend.domain.ProjectTask;
 import com.teamtracker.backend.domain.User;
 import com.teamtracker.backend.exceptions.ProjectNameException;
@@ -101,7 +102,7 @@ public class ProjectService {
     }
   }
 
-  public Project addPartner(String partnerName, String ownerName, String projectName) {
+  public List<ProjectNameAndStatus> addPartner(String partnerName, String ownerName, String projectName) {
 
     User partner = userRepository.findByUserName(partnerName);
     // 如果partner没有，那怎么添加嘛，添加不了啊
@@ -113,8 +114,21 @@ public class ProjectService {
     List<User> partners = foundProject.getPartners();
     partners.add(partner);
     foundProject.setPartners(partners);
-    Project savedProject = projectRepository.save(foundProject);
-    return savedProject;
+    projectRepository.save(foundProject);
+    // 返回这个partner这个人拥有的或者参与的所有projectName + status of "owned" or "participated"
+    List<ProjectNameAndStatus> projectNameAndStatusList = new ArrayList<>();
+    Iterable<Project> projectsOwned = partner.getProjectOwned();
+    for (Project project: projectsOwned) {
+      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), "owned");
+      projectNameAndStatusList.add(projectNameAndStatus);
+    }
+    Iterable<Project> projectsParticipated = partner.getProjectParticipated();
+    for (Project project: projectsParticipated) {
+      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), "participated");
+      projectNameAndStatusList.add(projectNameAndStatus);
+    }
+    return projectNameAndStatusList;
+
   }
 
   public Iterable<Project> findAllByPartner(User partner) {
