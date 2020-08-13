@@ -110,7 +110,7 @@ public class ProjectService {
   public List<ProjectNameAndStatus> addPartner(String partnerName, String ownerName, String projectName) {
 
     User partner = userRepository.findByUserName(partnerName);
-    // 如果partner没有，那怎么添加嘛，添加不了啊
+    // 如果partner没有，抛出异常
     if (partner == null) {
       // 这个我不知道写的对不对
       throw new UserNameException("The partner" + partner.getUserName() + " doest not exist.");
@@ -120,9 +120,26 @@ public class ProjectService {
       throw new ProjectNotFoundException("Project " + projectName + " cannot be found.");
     }
     List<User> partners = foundProject.getPartners();
-    partners.add(partner);
-    foundProject.setPartners(partners);
-    projectRepository.save(foundProject);
+    // 不能重复添加，使重复添加的效果失效
+    boolean repeatAdd = false;
+    // 我是我自己项目的partner，肯定不能这么干
+    if (ownerName.equals(partnerName)) {
+      repeatAdd = true;
+    }
+//    System.out.println("partnerName: " + partnerName);
+    for (User user: partners) {
+//      System.out.println("existingPartnerName: " + user.getUserName());
+      if (user.getUserName().equals(partnerName)) {
+        repeatAdd = true;
+        break;
+      }
+    }
+//    System.out.println(repeatAdd);
+    if (repeatAdd == false) {
+      partners.add(partner);
+      foundProject.setPartners(partners);
+      projectRepository.save(foundProject);
+    }
     // 返回这个partner这个人拥有的或者参与的所有projectName + status of "owned" or "participated"
     List<ProjectNameAndStatus> projectNameAndStatusList = new ArrayList<>();
     Iterable<Project> projectsOwned = partner.getProjectOwned();
@@ -135,15 +152,17 @@ public class ProjectService {
       ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), participated);
       projectNameAndStatusList.add(projectNameAndStatus);
     }
-    projectNameAndStatusList.add(new ProjectNameAndStatus(projectName, participated));
+    if (repeatAdd == false) {
+      projectNameAndStatusList.add(new ProjectNameAndStatus(projectName, participated));
+    }
     return projectNameAndStatusList;
   }
 
   public List<ProjectNameAndStatus> deletePartner(String partnerName, String ownerName, String projectName) {
     User partner = userRepository.findByUserName(partnerName);
-    // 如果partner没有，那怎么添加嘛，添加不了啊
+    // 如果partner没有，抛出异常
     if (partner == null) {
-      // 这个我不知道写的对不对
+      // 这个我不知道写的对不对?
       throw new UserNameException("The partner" + partner.getUserName() + " doest not exist.");
     }
     Project foundProject = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
@@ -164,6 +183,28 @@ public class ProjectService {
     Iterable<Project> projectsParticipated = partner.getProjectParticipated();
     for (Project project: projectsParticipated) {
       if (project.getProjectName().equals(projectName)) {continue;}
+      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), "participated");
+      projectNameAndStatusList.add(projectNameAndStatus);
+    }
+    return projectNameAndStatusList;
+  }
+  // ownedOrParticipated
+  public List<ProjectNameAndStatus> ownedOrParticipated(String userName) {
+    User user = userRepository.findByUserName(userName);
+    // 如果user没有，抛出异常
+    if (user == null) {
+      // 这个我不知道写的对不对?
+      throw new UserNameException("The user" + user.getUserName() + " doest not exist.");
+    }
+    // 返回这个user拥有的或者参与的所有projectName + status of "owned" or "participated"
+    List<ProjectNameAndStatus> projectNameAndStatusList = new ArrayList<>();
+    Iterable<Project> projectsOwned = user.getProjectOwned();
+    for (Project project: projectsOwned) {
+      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), "owned");
+      projectNameAndStatusList.add(projectNameAndStatus);
+    }
+    Iterable<Project> projectsParticipated = user.getProjectParticipated();
+    for (Project project: projectsParticipated) {
       ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), "participated");
       projectNameAndStatusList.add(projectNameAndStatus);
     }
