@@ -114,6 +114,21 @@ public class ProjectController {
     return new ResponseEntity<Iterable<ProjectNameAndStatus>>(projectNameAndStatuses, HttpStatus.OK);
   }
 
+  @PostMapping("/notEngage")
+  public ResponseEntity<?> notEngageProject(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
+    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+    if (errMap != null) {
+      return errMap;
+    }
+    String partnerName = jsonMap.get("participantName");
+    String ownerName = jsonMap.get(("ownerName"));
+    String projectName = jsonMap.get("projectName");
+
+    Iterable<ProjectNameAndStatus> projectNameAndStatuses = projectService.deletePartner(partnerName, ownerName, projectName);
+
+    return new ResponseEntity<Iterable<ProjectNameAndStatus>>(projectNameAndStatuses, HttpStatus.OK);
+  }
+
   @GetMapping("/par/{parName}")
   public ResponseEntity<Iterable<Project>> getAllProjectByParName(@PathVariable String parName) {
     User partner = userService.findByUserName(parName);

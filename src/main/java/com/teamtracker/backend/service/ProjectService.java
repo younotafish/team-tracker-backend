@@ -17,9 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static java.lang.Thread.sleep;
+
 @Service
 @Transactional
 public class ProjectService {
+
+  private final String owned = "owned";
+  private final String participated = "participated";
 
   @Autowired
   private ProjectRepository projectRepository;
@@ -50,7 +55,7 @@ public class ProjectService {
           owner = new User(project.getOwnerName());
         }
         project.setOwner(owner);
-        User savedOwner = userRepository.save(owner); // 要不要加
+        User savedOwner = userRepository.save(owner);
         projectRepository.save(project);
       }
       Iterable<Project> allProjects = projectRepository.findByOwnerName(project.getOwnerName());
@@ -111,10 +116,44 @@ public class ProjectService {
       throw new UserNameException("The partner" + partner.getUserName() + " doest not exist.");
     }
     Project foundProject = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
+    if (foundProject == null) {
+      throw new ProjectNotFoundException("Project " + projectName + " cannot be found.");
+    }
     List<User> partners = foundProject.getPartners();
     partners.add(partner);
     foundProject.setPartners(partners);
     projectRepository.save(foundProject);
+    // 返回这个partner这个人拥有的或者参与的所有projectName + status of "owned" or "participated"
+    List<ProjectNameAndStatus> projectNameAndStatusList = new ArrayList<>();
+    Iterable<Project> projectsOwned = partner.getProjectOwned();
+    for (Project project: projectsOwned) {
+      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), owned);
+      projectNameAndStatusList.add(projectNameAndStatus);
+    }
+    Iterable<Project> projectsParticipated = partner.getProjectParticipated();
+    for (Project project: projectsParticipated) {
+      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), participated);
+      projectNameAndStatusList.add(projectNameAndStatus);
+    }
+    projectNameAndStatusList.add(new ProjectNameAndStatus(projectName, participated));
+    return projectNameAndStatusList;
+  }
+
+  public List<ProjectNameAndStatus> deletePartner(String partnerName, String ownerName, String projectName) {
+    User partner = userRepository.findByUserName(partnerName);
+    // 如果partner没有，那怎么添加嘛，添加不了啊
+    if (partner == null) {
+      // 这个我不知道写的对不对
+      throw new UserNameException("The partner" + partner.getUserName() + " doest not exist.");
+    }
+    Project foundProject = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
+    if (foundProject == null) {
+      throw new ProjectNotFoundException("Project " + projectName + " cannot be found.");
+    }
+    List<User> partners = foundProject.getPartners();
+    partners.remove(partner);
+    foundProject.setPartners(partners);
+    Project savedProject = projectRepository.save(foundProject);
     // 返回这个partner这个人拥有的或者参与的所有projectName + status of "owned" or "participated"
     List<ProjectNameAndStatus> projectNameAndStatusList = new ArrayList<>();
     Iterable<Project> projectsOwned = partner.getProjectOwned();
@@ -124,11 +163,11 @@ public class ProjectService {
     }
     Iterable<Project> projectsParticipated = partner.getProjectParticipated();
     for (Project project: projectsParticipated) {
+      if (project.getProjectName().equals(projectName)) {continue;}
       ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), "participated");
       projectNameAndStatusList.add(projectNameAndStatus);
     }
     return projectNameAndStatusList;
-
   }
 
   public Iterable<Project> findAllByPartner(User partner) {
