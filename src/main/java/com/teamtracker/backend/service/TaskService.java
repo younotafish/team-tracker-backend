@@ -139,6 +139,27 @@ public class TaskService {
         return taskNames;
     }
 
+    public List<String> deleteByExistingTask (ProjectTask inputTask) {
+        ProjectTask existingTask = projectTaskRepository.findByProjectNameAndOwnerNameAndTaskName(inputTask.getProjectName(), inputTask.getOwnerName(), inputTask.getTaskName());
+        if (existingTask == null) {
+            // 抛出异常，没这个任务
+            // 这里应该写一个taskNotFoundException的
+            throw new ProjectNotFoundException("Task " + inputTask.getTaskName() + " cannot be found.");
+        }
+        projectTaskRepository.delete(existingTask);
+        List<String> taskNames = new ArrayList<>();
+        // 如果没有status这个字段，或者和数据库里的status字段不匹配，直接抛出异常
+        // 这里应该写一个StatusNotMatchedException的
+        if (inputTask.getStatus() == null || !inputTask.getStatus().equals(existingTask.getStatus())) {
+            throw new ProjectNotFoundException("The status of input task doesn't match the existing task in the repository.");
+        }
+        Iterable<ProjectTask> foundTasks = projectTaskRepository.findByProjectNameAndOwnerNameAndStatus(inputTask.getProjectName(), inputTask.getOwnerName(), inputTask.getStatus());
+        for (ProjectTask task: foundTasks) {
+            taskNames.add(task.getTaskName());
+        }
+        return taskNames;
+    }
+
     public List<String> updateTaskByOriginalTaskName(String projectName,
                                                      String ownerName,
                                                      String taskName,
