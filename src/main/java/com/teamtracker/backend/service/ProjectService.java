@@ -112,7 +112,7 @@ public class ProjectService {
     User partner = userRepository.findByUserName(partnerName);
     // 如果partner没有，抛出异常
     if (partner == null) {
-      // 这个我不知道写的对不对
+      // 这个我不知道写的对不对？
       throw new UserNameException("The partner" + partner.getUserName() + " doest not exist.");
     }
     Project foundProject = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);

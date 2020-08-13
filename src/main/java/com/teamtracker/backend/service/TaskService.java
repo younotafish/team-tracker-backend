@@ -211,4 +211,44 @@ public class TaskService {
         Iterable<ProjectTask> foundTasks = set;
         return foundTasks;
     }
+
+    public List<List<ProjectTask>> moveTaskStatus(String projectName, String ownerName, String taskName, String newStatus) {
+        ProjectTask foundTask = projectTaskRepository.findByProjectNameAndOwnerNameAndTaskName(projectName, ownerName, taskName);
+        // 抛出异常，没这个任务
+        // 这里应该写一个taskNotFoundException的
+        if (foundTask == null) {
+            throw new ProjectNotFoundException("Task " + taskName + " cannot be found.");
+        }
+        String oldStatus = foundTask.getStatus();
+        // 判断oldStatus和newStatus是否相同
+        boolean isStatusesEqual = false;
+        if (oldStatus.equals(newStatus)) {
+            isStatusesEqual = true;
+        }
+        // 如果没有这个新状态既不是todo也不是doing也不是done，抛出异常
+        // 其实应该写一个statusNotFoundException的，再优化吧
+        else if (!newStatus.equals(todo) && !newStatus.equals(doing) && newStatus.equals(done)) {
+            throw new ProjectNotFoundException("Invalid new status: " + newStatus);
+        } else {
+            foundTask.setStatus(newStatus);
+            ProjectTask savedTask = projectTaskRepository.save(foundTask);
+        }
+        // 将moved过的oldTasks和newTasks返回
+        List<ProjectTask> oldTasks = new ArrayList();
+        Iterable<ProjectTask> oldStatusTasks = projectTaskRepository.findByProjectNameAndOwnerNameAndStatus(projectName, ownerName, oldStatus);
+        for (ProjectTask task: oldStatusTasks) {
+            oldTasks.add(task);
+        }
+        List<ProjectTask> newTasks = new ArrayList<>();
+        if (isStatusesEqual == false) {
+            Iterable<ProjectTask> newStatusTasks = projectTaskRepository.findByProjectNameAndOwnerNameAndStatus(projectName, ownerName, newStatus);
+            for (ProjectTask task: newStatusTasks) {
+                newTasks.add(task);
+            }
+        }
+        List<List<ProjectTask>> result = new ArrayList<>();
+        result.add(oldTasks);
+        result.add(newTasks);
+        return result;
+    }
 }

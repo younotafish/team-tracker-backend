@@ -1,5 +1,6 @@
 package com.teamtracker.backend.controller;
 
+import com.sun.deploy.panel.ITreeNode;
 import com.teamtracker.backend.domain.Project;
 import com.teamtracker.backend.domain.ProjectTask;
 import com.teamtracker.backend.service.MapValidationErrorService;
@@ -120,6 +121,22 @@ public class TaskController {
     String searchedString = jsonMap.get("searchedString");
     Iterable<ProjectTask> foundTasks = taskService.searchByString(ownerName, projectName, searchedString);
     return new ResponseEntity<Iterable<ProjectTask>>(foundTasks, HttpStatus.OK);
+  }
+
+  @PostMapping("/moveTaskStatus")
+  public ResponseEntity<?> moveTaskStatus(@Valid @RequestBody Map<String, String> jsonMap, BindingResult result) {
+    ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
+    if (errMap != null) {
+      return errMap;
+    }
+    String ownerName = jsonMap.get(("ownerName"));
+    String projectName = jsonMap.get(("projectName"));
+    String taskName = jsonMap.get("taskName");
+    String newStatus = jsonMap.get("newStatus");
+
+    List<List<ProjectTask>> oldTasksAndNewTasks = taskService.moveTaskStatus(projectName, ownerName, taskName, newStatus);
+//    Iterable<Iterable<ProjectTask>> res = oldTasksAndNewTasks; // 不合法
+    return new ResponseEntity<List<List<ProjectTask>>>(oldTasksAndNewTasks, HttpStatus.OK);
   }
 
 }
