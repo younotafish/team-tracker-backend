@@ -218,6 +218,11 @@ public class ProjectService {
   }
 
   public Iterable<Project> searchByString(String ownerName, String searchedString) {
+    Iterable<Project> foundProjects;
+    if (searchedString.length() == 0) {
+      foundProjects = new ArrayList<>();
+      return foundProjects;
+    }
     Set<Project> set = new HashSet<>();
     // 下面都是该用户拥有的projet进行搜索
 
@@ -242,9 +247,13 @@ public class ProjectService {
 
     // 下面是对该用户参与的项目进行搜索
     User user = userRepository.findByUserName(ownerName);
+    for (Project project: user.getProjectParticipated()) {
+      if (kmp(project.getProjectName(), searchedString) || kmp(project.getProjectDescription(), searchedString)) {
+        set.add(project);
+      }
+    }
 
-
-    Iterable<Project> foundProjects = set;
+    foundProjects = set;
     return foundProjects;
 //    Iterable<Project> projects = projectRepository.findByOwnerName(ownerName);
 //    List<String> projectNames = new ArrayList<>();
@@ -262,6 +271,37 @@ public class ProjectService {
 //      }
 //    }
 
+  }
+
+  // 对参与的project写一个kmp算法匹配字段
+  private boolean kmp(String s, String t) {
+    int m = s.length(), n = t.length();
+    if (n == 0) {return true;}
+    if (m == 0) {return false;}
+    // 构建next[]数组
+    int k = -1, j = 0;
+    int[] next = new int[n];
+    next[0] = -1;
+    while (j < n - 1) {
+      if (k == -1 || s.charAt(j) == s.charAt(k)) {
+        ++k;
+        ++j;
+        next[j] = s.charAt(j) != s.charAt(k) ? k : next[k];
+      } else {
+        k = next[k];
+      }
+    }
+    int i = 0;
+    j = 0;
+    while (i < m && j < n) {
+      if (j == - 1 || s.charAt(i) == t.charAt(j)) {
+        ++i; ++j;
+      } else {
+        j = next[j];
+      }
+    }
+    int res = (j == n) ? i - j : -1;
+    return res != -1;
   }
 
 
