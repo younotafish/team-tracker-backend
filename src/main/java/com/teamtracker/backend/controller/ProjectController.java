@@ -89,8 +89,9 @@ public class ProjectController {
     projectService.deleteProjectByProjectNameAndOwnerName(projectName, ownerName);
     // get the exact user
 //    User owner = userService.findByUserName(ownerName);
-    Iterable<Project> projectsByOwner = projectService.findAllByOwnerName(ownerName);
-    return new ResponseEntity<Iterable<Project>>(projectsByOwner, HttpStatus.OK);
+//    Iterable<Project> projectsByOwner = projectService.findAllByOwnerName(ownerName);
+    Iterable<ProjectNameAndStatus> foundProjects = projectService.ownedOrParticipated(ownerName);
+    return new ResponseEntity<Iterable<ProjectNameAndStatus>>(foundProjects, HttpStatus.OK);
   }
 
   @GetMapping("/own/{ownerName}")

@@ -97,7 +97,7 @@ public class ProjectService {
     if (owner == null) {
       User newUser = new User(ownerName);
       owner = userRepository.save(newUser);
-      // 返回个空的呗
+      // 返回个空list
       List<Project> list = new ArrayList<>();
       Iterable<Project> iterable = list;
       return iterable;
@@ -106,6 +106,34 @@ public class ProjectService {
       return projectsByOwnerName;
     }
   }
+
+//  public List<ProjectNameAndStatus> findAllStatusByUserName(String ownerName) {
+//    List<ProjectNameAndStatus> res = new ArrayList<>();
+//    // 如果没有这个user，自动创建一个user
+//    User owner = userRepository.findByUserName(ownerName);
+//    if (owner == null) {
+//      User newUser = new User(ownerName);
+//      owner = userRepository.save(newUser);
+//      // 返回个空list
+//      return res;
+//    } else {
+//      // 返回这个user拥有的或者参与的所有projectName + status of "owned" or "participated"
+//      // 这个方法和owned
+//      Iterable<Project> projectsOwned = owner.getProjectOwned();
+//      for (Project project: projectsOwned) {
+//        ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), owned, project.getProjectDescription());
+//        projectNameAndStatusList.add(projectNameAndStatus);
+//      }
+//      Iterable<Project> projectsParticipated = user.getProjectParticipated();
+//      for (Project project: projectsParticipated) {
+//        ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), participated, project.getProjectDescription());
+//        projectNameAndStatusList.add(projectNameAndStatus);
+//      }
+//      return projectNameAndStatusList;
+//    }
+//
+//
+//  }
 
   public List<ProjectNameAndStatus> addPartner(String partnerName, String ownerName, String projectName) {
     User partner = userRepository.findByUserName(partnerName);
