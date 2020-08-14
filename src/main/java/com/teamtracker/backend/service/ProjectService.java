@@ -136,17 +136,20 @@ public class ProjectService {
 //  }
 
   public List<ProjectNameAndStatus> addPartner(String partnerName, String ownerName, String projectName) {
-    User partner = userRepository.findByUserName(partnerName);
-    // 如果partner没有，抛出异常
-    if (partner == null) {
-//       throw new UserNameException("The partner" + partner.getUserName() + " doest not exist.");
-      partner = new User(partnerName);
-      userRepository.save(partner);
-    }
     Project foundProject = projectRepository.findByOwnerNameAndProjectName(ownerName, projectName);
     if (foundProject == null) {
       throw new ProjectNotFoundException("Project " + projectName + " cannot be found.");
     }
+    User partner = userRepository.findByUserName(partnerName);
+    // 如果partner没有，不抛出异常，添加该用户
+    if (partner == null) {
+//       throw new UserNameException("The partner" + partner.getUserName() + " doest not exist.");
+      partner = new User(partnerName);
+      List<ProjectNameAndStatus> list = new ArrayList<>();
+      list.add(new ProjectNameAndStatus(foundProject.getProjectName(), participated, foundProject.getProjectDescription()));
+      return list;
+    }
+
     List<User> partners = foundProject.getPartners();
     // 不能重复添加，使重复添加的效果失效
     boolean repeatAdd = false;
@@ -168,18 +171,28 @@ public class ProjectService {
       foundProject.setPartners(partners);
       projectRepository.save(foundProject);
     }
+    userRepository.save(partner);
+
     // 返回这个partner这个人拥有的或者参与的所有projectName + status of "owned" or "participated"
     List<ProjectNameAndStatus> projectNameAndStatusList = new ArrayList<>();
     Iterable<Project> projectsOwned = partner.getProjectOwned();
-    for (Project project: projectsOwned) {
-      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), owned, project.getProjectDescription());
-      projectNameAndStatusList.add(projectNameAndStatus);
-    }
+//    if (projectsOwned != null) {
+      for (Project project : projectsOwned) {
+//        if (project != null) {
+          ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), owned, project.getProjectDescription());
+          projectNameAndStatusList.add(projectNameAndStatus);
+//        }
+      }
+//    }
     Iterable<Project> projectsParticipated = partner.getProjectParticipated();
-    for (Project project: projectsParticipated) {
-      ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), participated, project.getProjectDescription());
-      projectNameAndStatusList.add(projectNameAndStatus);
-    }
+//    if (projectsParticipated != null) {
+      for (Project project : projectsParticipated) {
+//        if (project != null) {
+          ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(project.getProjectName(), participated, project.getProjectDescription());
+          projectNameAndStatusList.add(projectNameAndStatus);
+//        }
+      }
+//    }
     if (repeatAdd == false) {
       projectNameAndStatusList.add(new ProjectNameAndStatus(projectName, participated, foundProject.getProjectDescription()));
     }
