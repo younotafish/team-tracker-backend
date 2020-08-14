@@ -36,6 +36,12 @@ public class ProjectService {
   private ProjectTaskRepository projectTaskRepository;
 
   public List<ProjectNameAndStatus> saveProject(Project project) {
+    // 先确定这个project的owner
+      User owner = userRepository.findByUserName(project.getOwnerName());
+      // 检查数据库中有没有存过这个owner
+      if (owner == null) {
+        owner = new User(project.getOwnerName());
+      }
       Project existingProject = projectRepository
           .findByOwnerNameAndProjectName(project.getOwnerName(), project.getProjectName());
       // 如果数据库里已经有这个project（根据ownerName和projectName唯一确定），
@@ -48,21 +54,24 @@ public class ProjectService {
       }
       // 否则，数据库里以前没存过这个project，那么就创建这个project
       else {
-        // 先确定这个project的owner
-        User owner = userRepository.findByUserName(project.getOwnerName());
-        // 检查数据库中有没有存过这个owner
-        if (owner == null) {
-          owner = new User(project.getOwnerName());
-        }
         project.setOwner(owner);
         User savedOwner = userRepository.save(owner);
         projectRepository.save(project);
       }
+      // 拥有的projects
       Iterable<Project> allProjects = projectRepository.findByOwnerName(project.getOwnerName());
       List<ProjectNameAndStatus> projectNameAndStatusList = new ArrayList<>();
       for (Project eachProject: allProjects) {
         ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(eachProject.getProjectName(), owned, eachProject.getProjectDescription());
         projectNameAndStatusList.add(projectNameAndStatus);
+      }
+      // 参与的projects
+      Iterable<Project> projectsParticipated = owner.getProjectParticipated();
+      if (projectsParticipated != null) {
+        for (Project eachProject : projectsParticipated) {
+          ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(eachProject.getProjectName(), participated, eachProject.getProjectDescription());
+          projectNameAndStatusList.add(projectNameAndStatus);
+        }
       }
       return projectNameAndStatusList;
       //      List<String> projectNames = new ArrayList<>();
