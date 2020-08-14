@@ -212,7 +212,7 @@ public class TaskService {
         return foundTasks;
     }
 
-    public List<List<ProjectTask>> moveTaskStatus(String projectName, String ownerName, String taskName, String newStatus) {
+    public List<List<String>> moveTaskStatus(String projectName, String ownerName, String taskName, String newStatus) {
         ProjectTask foundTask = projectTaskRepository.findByProjectNameAndOwnerNameAndTaskName(projectName, ownerName, taskName);
         // 抛出异常，没这个任务
         // 这里应该写一个taskNotFoundException的
@@ -234,19 +234,35 @@ public class TaskService {
             ProjectTask savedTask = projectTaskRepository.save(foundTask);
         }
         // 将moved过的oldTasks和newTasks返回
-        List<ProjectTask> oldTasks = new ArrayList();
+//        List<ProjectTask> oldTasks = new ArrayList();
+//        Iterable<ProjectTask> oldStatusTasks = projectTaskRepository.findByProjectNameAndOwnerNameAndStatus(projectName, ownerName, oldStatus);
+//        for (ProjectTask task: oldStatusTasks) {
+//            oldTasks.add(task);
+//        }
+//        List<ProjectTask> newTasks = new ArrayList<>();
+//        if (isStatusesEqual == false) {
+//            Iterable<ProjectTask> newStatusTasks = projectTaskRepository.findByProjectNameAndOwnerNameAndStatus(projectName, ownerName, newStatus);
+//            for (ProjectTask task: newStatusTasks) {
+//                newTasks.add(task);
+//            }
+//        }
+//        List<List<ProjectTask>> result = new ArrayList<>();
+//        result.add(oldTasks);
+//        result.add(newTasks);
+
+        List<String> oldTasks = new ArrayList<>();
         Iterable<ProjectTask> oldStatusTasks = projectTaskRepository.findByProjectNameAndOwnerNameAndStatus(projectName, ownerName, oldStatus);
         for (ProjectTask task: oldStatusTasks) {
-            oldTasks.add(task);
+            oldTasks.add(task.getTaskName());
         }
-        List<ProjectTask> newTasks = new ArrayList<>();
+        List<String> newTasks = new ArrayList<>();
         if (isStatusesEqual == false) {
             Iterable<ProjectTask> newStatusTasks = projectTaskRepository.findByProjectNameAndOwnerNameAndStatus(projectName, ownerName, newStatus);
             for (ProjectTask task: newStatusTasks) {
-                newTasks.add(task);
+                newTasks.add(task.getTaskName());
             }
         }
-        List<List<ProjectTask>> result = new ArrayList<>();
+        List<List<String>> result = new ArrayList<>();
         result.add(oldTasks);
         result.add(newTasks);
         return result;

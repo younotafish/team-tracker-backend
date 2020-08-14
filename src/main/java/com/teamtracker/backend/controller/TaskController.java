@@ -133,9 +133,10 @@ public class TaskController {
     String taskName = jsonMap.get("taskName");
     String newStatus = jsonMap.get("newStatus");
 
-    List<List<ProjectTask>> oldTasksAndNewTasks = taskService.moveTaskStatus(projectName, ownerName, taskName, newStatus);
+//    List<List<ProjectTask>> oldTasksAndNewTasks = taskService.moveTaskStatus(projectName, ownerName, taskName, newStatus);
 //    Iterable<Iterable<ProjectTask>> res = oldTasksAndNewTasks; // 不合法
-    return new ResponseEntity<List<List<ProjectTask>>>(oldTasksAndNewTasks, HttpStatus.OK);
+    List<List<String>> oldTasksAndNewTasks = taskService.moveTaskStatus(projectName, ownerName, taskName, newStatus);
+    return new ResponseEntity<List<List<String>>>(oldTasksAndNewTasks, HttpStatus.OK);
   }
 
 }
