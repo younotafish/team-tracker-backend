@@ -227,7 +227,7 @@ public class TaskService {
         }
         // 如果没有这个新状态既不是todo也不是doing也不是done，抛出异常
         // 其实应该写一个statusNotFoundException的，再优化吧
-        else if (!newStatus.equals(todo) && !newStatus.equals(doing) && newStatus.equals(done)) {
+        else if (!newStatus.equals(todo) && !newStatus.equals(doing) && !newStatus.equals(done)) {
             throw new ProjectNotFoundException("Invalid new status: " + newStatus);
         } else {
             foundTask.setStatus(newStatus);
