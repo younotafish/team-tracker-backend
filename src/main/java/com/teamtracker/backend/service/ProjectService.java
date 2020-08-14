@@ -35,7 +35,7 @@ public class ProjectService {
   @Autowired
   private ProjectTaskRepository projectTaskRepository;
 
-  public Iterable<Project> saveProject(Project project) {
+  public List<ProjectNameAndStatus> saveProject(Project project) {
       Project existingProject = projectRepository
           .findByOwnerNameAndProjectName(project.getOwnerName(), project.getProjectName());
       // 如果数据库里已经有这个project（根据ownerName和projectName唯一确定），
@@ -59,7 +59,12 @@ public class ProjectService {
         projectRepository.save(project);
       }
       Iterable<Project> allProjects = projectRepository.findByOwnerName(project.getOwnerName());
-      return allProjects;
+      List<ProjectNameAndStatus> projectNameAndStatusList = new ArrayList<>();
+      for (Project eachProject: allProjects) {
+        ProjectNameAndStatus projectNameAndStatus = new ProjectNameAndStatus(eachProject.getProjectName(), owned, eachProject.getProjectDescription());
+        projectNameAndStatusList.add(projectNameAndStatus);
+      }
+      return projectNameAndStatusList;
       //      List<String> projectNames = new ArrayList<>();
 //      for (Project foundProject: allProjects) {
 //        projectNames.add(foundProject.getProjectName());
