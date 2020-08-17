@@ -1,4 +1,4 @@
-# Project Name： Team Tracker
+# Project Name： Team Tracker(backend part)
 
 ## frontend repo： https://github.com/MoonJiao123/team-tracker-frontend.git
 ## backendrepo： https://github.com/younotafish/team-tracker-backend.git
