@@ -5,27 +5,34 @@
 
 ## Introduction ：
 A teamwork collaboration mini app which help you and your team manage projects efficiently.
-[youtube demo viedo](https://www.youtube.com/watch?v=LiQBcPudNH4)
-## 项目背景：
-项目管理、任务规划是每个人、每个团队都会遇到的问题。在校园中，不论是社团的任务规划，还是课堂大作业的协作，大部分都是基于TIM甚至微信的管理，我们常常会陷入时间线混乱，文件杂乱不堪，责任分工不明确，进度难以掌控的局面。为了解决这个痛点，我们决定开发Team Tracker
-## 项目框架：
-在我们的初步设想中，项目主要包括一下几个功能。
-## 任务分配：
-项目的发起人可以设置不同的任务块，任务块可以继续划分子任务块。
-## 权限管理：
-不同的人对不同的任务块有不同的管理权限。项目发起人是超级用户，对所有的项目有所有的权限，具体负责人对自己负责的项目有所有权限，其他人员对不属于自己的任务块只有查看权（类似于操作系统的权限管理777）。
-## 进度掌控：
-任务分成：待进行，进行中，已完成三个状态，长按删除，左滑把任务移到下一个状态
+To have a quick view, click the picture below which will route you to the YouTube page
+[![youtube demo video](Readme/demo.png)](https://www.youtube.com/watch?v=LiQBcPudNH4)
+## Project Background：
+Every time when we need to cooperate within a big team, we will always fall into the inefficiency trap. We always fail to handle the progress, the file is always messy and the responsibility is always unclear. It's all because we don't have a suitable tool. For this reason, we developped this app: Team Tracker 
+## Project main functionality：
+1. start new project
+2. join a new project
+3. invite teammate to join a project
+4. update project description
+5. create tasks within a project
+6. update tasks
+7. assign priority to tasks
+8.  assign tasks to group member
+9.  Pin task to the top
+## Authorization Management：
+1. group member will have different role and the project owner can manage the authorization in a project.
+## Progress Management：
+1. tasks are classified to different status: Todos, Doings, Dones. And the project owner can change the status so that each member can know how much work has been done and how much hasn't.
 
 
-## 前端说明
+## How to run frontend
 * git clone https://github.com/MoonJiao123/team-tracker-frontend.git
 * cd client
 * npm i
 * npm install wepy-cli -g
 * npm run dev:weapp  
 
-## 前端项目结构
+## frontend structure
 ```
 ├── app.config.js
 ├── app.js
@@ -71,11 +78,11 @@ A teamwork collaboration mini app which help you and your team manage projects e
 └── util
     └── v-request.js
 ```
-## 后端说明
+## how to run backend
 * git clone https://github.com/younotafish/team-tracker-backend.git
-* 参考heroku运行spring boot项目
+* click [Deploying / Hosting Spring Boot applications on Heroku](https://www.callicoder.com/deploy-host-spring-boot-apps-on-heroku/)
   
-## 后端项目结构
+## backend structure
 
 ```
 ├── mvnw
